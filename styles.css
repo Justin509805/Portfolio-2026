@@ -236,6 +236,7 @@ a {
   font-size: 0.8rem;
   letter-spacing: -0.03em;
   text-transform: uppercase;
+  padding: 1.5rem clamp(2rem, 5vw, 4.5rem);
 }
 
 /* Sections */
@@ -262,7 +263,7 @@ a {
   position: relative;
   /* overlay handles padding while spacer preserves flow */
   padding: 0;
-  border: none;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .section-work .work-spacer {
@@ -311,6 +312,15 @@ a {
   color: var(--muted);
   font-size: 0.85rem;
   max-width: 20rem;
+}
+
+/* Work section title tweaks */
+.section-work .section-header h2 {
+  font-size: clamp(1.15rem, 4.2vw, 1.9rem);
+  text-transform: none;
+  letter-spacing: 0;
+  color: #fff;
+  font-weight: 600;
 }
 
 /* Projects Grid */
