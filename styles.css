@@ -87,6 +87,7 @@ body {
 main {
   padding-inline: clamp(2rem, 5vw, 4.5rem);
   padding-bottom: 5rem;
+  margin-top: 100vh; /* push page content below the fixed first-screen */
 }
 
 section {
@@ -101,11 +102,16 @@ a {
 /* First screen / Nav */
 
 .first-screen {
-  min-height: 100vh;
+  /* fixed hero that stays in place; content scrolls over it */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
   display: grid;
   padding-top: var(--nav-offset);
   border-bottom: 1px solid var(--border-subtle);
-  position: relative; /* contain absolutely-positioned center-name */
 }
 
 .top-nav {
@@ -242,6 +248,8 @@ a {
 /* Container wrapping selected work, about, and contact */
 .content-container {
   background: var(--bg);
+  position: relative;
+  z-index: 15; /* sit above the fixed first-screen as it scrolls */
 }
 
 /* Make all sections after the first-screen use the content background so they scroll together */
@@ -275,7 +283,11 @@ a {
 
 /* Ensure first-screen content sits below the overlay visually */
 .first-screen {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: 5;
 }
 
