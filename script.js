@@ -92,6 +92,54 @@
   requestAnimationFrame(tick);
 })();
 
+/* Sticky-like center name behavior: shrink + blur as the #work section scrolls up
+   The center name stays fixed in the viewport; when the work section's top
+   moves from the bottom of the viewport into the top, we map that progress
+   (0 → 1) to scale/blur values.
+*/
+(function () {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return;
+
+  const center = document.querySelector('.center-name');
+  const work = document.querySelector('#work');
+  if (!center || !work) return;
+
+  let ticking = false;
+
+  function clamp(v, a, b) { return Math.min(Math.max(v, a), b); }
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const rect = work.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+
+      // progress = 0 when work.top === vh (just below viewport)
+      // progress = 1 when work.top === 0 (aligned with viewport top)
+      let progress = (vh - rect.top) / vh;
+      progress = clamp(progress, 0, 1);
+
+      // Map progress to scale (1 -> 0.82) and blur (0 -> 6px)
+      const scale = 1 - 0.18 * progress;
+      const blur = 6 * progress;
+      const opacity = 1 - 0.35 * progress;
+
+      center.style.transform = `translateY(-50%) scale(${scale})`;
+      center.style.filter = `blur(${blur}px)`;
+      center.style.opacity = `${opacity}`;
+
+      ticking = false;
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  // Run once on load to set initial state
+  window.addEventListener('load', onScroll);
+})();
+
 /* Sliding selected work overlay + scroll-driven blur/scale
    - Pins .work-overlay and moves its top from 100vh → 0vh while scrolling
    - Applies blur/scale to .center-name, .top-nav, .bottom-note based on progress
