@@ -92,3 +92,95 @@
   requestAnimationFrame(tick);
 })();
 
+/* Sliding selected work overlay + scroll-driven blur/scale
+   - Pins .work-overlay and moves its top from 100vh → 0vh while scrolling
+   - Applies blur/scale to .center-name, .top-nav, .bottom-note based on progress
+   - Computes .work-spacer height so the document scroll covers overlay content
+*/
+(function () {
+  const workSection = document.querySelector('.section-work');
+  if (!workSection) return;
+
+  const workOverlay = workSection.querySelector('.work-overlay');
+  const workSpacer = workSection.querySelector('.work-spacer');
+  if (!workOverlay || !workSpacer) return;
+
+  const firstScreen = document.querySelector('.first-screen');
+  const centerName = document.querySelector('.center-name');
+  const topNav = document.querySelector('.top-nav');
+  const bottomNote = document.querySelector('.bottom-note');
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    // If user prefers reduced motion, keep overlay in normal flow and don't pin it.
+    workOverlay.style.position = 'relative';
+    workOverlay.style.top = '';
+    workOverlay.style.height = 'auto';
+    workOverlay.style.overflow = 'visible';
+    workSpacer.style.height = 'auto';
+    return;
+  }
+
+  let ticking = false;
+
+  function updateSpacer() {
+    // Make spacer large enough so the document scroll covers the overlay content.
+    // Total scroll for this section should allow the overlay's internal scroll.
+    const overlayContentHeight = workOverlay.scrollHeight;
+    // spacer = viewport + overlay content height gives room for pinning + internal scroll
+    workSpacer.style.height = `${window.innerHeight + overlayContentHeight}px`;
+  }
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(() => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const firstH = firstScreen ? firstScreen.offsetHeight : window.innerHeight;
+      const progress = Math.min(Math.max(scrollY / firstH, 0), 1);
+
+      // Move overlay top from 100vh -> 0vh
+      workOverlay.style.top = `${100 - progress * 100}vh`;
+
+      if (progress > 0.0001) {
+        const centerScale = 1 - 0.18 * progress;
+        const centerBlur = progress * 6; // px
+        const centerOpacity = 1 - 0.35 * progress;
+        if (centerName) {
+          centerName.style.transform = `scale(${centerScale})`;
+          centerName.style.filter = `blur(${centerBlur}px)`;
+          centerName.style.opacity = `${centerOpacity}`;
+        }
+
+        if (bottomNote) {
+          bottomNote.style.transform = `scale(${1 - 0.06 * progress})`;
+          bottomNote.style.filter = `blur(${progress * 2}px)`;
+          bottomNote.style.opacity = `${1 - 0.4 * progress}`;
+        }
+      } else {
+        // Clear inline styles to preserve initial reveal animation styles
+        [centerName, bottomNote].forEach((el) => {
+          if (!el) return;
+          el.style.transform = '';
+          el.style.filter = '';
+          el.style.opacity = '';
+        });
+      }
+
+      ticking = false;
+    });
+  }
+
+  window.addEventListener('load', () => {
+    updateSpacer();
+    onScroll();
+  });
+
+  window.addEventListener('resize', () => {
+    updateSpacer();
+    onScroll();
+  });
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
