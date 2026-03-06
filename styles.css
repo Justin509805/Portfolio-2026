@@ -34,7 +34,6 @@
   --bg: #0f0f0f;
   --fg: #0d0b0b;
   --muted: #a0a0a0;
-  --content-bg: #050505;
   --nav-offset: 4rem;
   --border-subtle: rgba(255, 255, 255, 0.08);
   --accent-soft: rgba(255, 255, 255, 0.2);
@@ -240,9 +239,14 @@ a {
   border-bottom: 1px solid var(--border-subtle);
 }
 
+/* Container wrapping selected work, about, and contact */
+.content-container {
+  background: var(--bg);
+}
+
 /* Make all sections after the first-screen use the content background so they scroll together */
 .section:not(.first-screen) {
-  background: var(--content-bg);
+  background: var(--bg);
 }
 
 /* Work overlay: slides up over the first screen */
@@ -262,7 +266,6 @@ a {
   position: relative;
   margin-top: 0;
   min-height: 100vh;
-  z-index: 20;
   overflow: visible;
   padding-inline: clamp(2rem, 5vw, 4.5rem);
   padding-top: 1.6rem;
@@ -527,6 +530,7 @@ a {
   .top-nav {
     padding-inline: 1.4rem;
     margin-inline: 0;
+    z-index: 100;
   }
 
   main {
