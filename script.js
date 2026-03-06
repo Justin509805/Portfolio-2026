@@ -195,7 +195,8 @@
         const centerBlur = progress * 6; // px
         const centerOpacity = 1 - 0.35 * progress;
         if (centerName) {
-          centerName.style.transform = `scale(${centerScale})`;
+          // preserve vertical centering while scaling
+          centerName.style.transform = `translateY(-50%) scale(${centerScale})`;
           centerName.style.filter = `blur(${centerBlur}px)`;
           centerName.style.opacity = `${centerOpacity}`;
         }
