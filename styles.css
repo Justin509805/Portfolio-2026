@@ -37,6 +37,7 @@
   --nav-offset: 4rem;
   --border-subtle: rgba(255, 255, 255, 0.08);
   --accent-soft: rgba(255, 255, 255, 0.2);
+  --content-bg: var(--bg);
   --font-sans: "PP Neue Montreal", system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
 }
@@ -66,22 +67,44 @@ body {
   text-rendering: geometricPrecision;
 }
 
-/* Gate: only show non-name UI when animation is done */
+/* Gate: hide everything except centre name until reveal is complete */
 .top-nav,
 .bottom-note,
 .section,
 .site-footer {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 320ms ease-out;
+  /* nav and note will also translate/scale when they appear */
+  transition: opacity 320ms ease-out, transform 320ms ease-out;
 }
 
-.anim-done .top-nav,
-.anim-done .bottom-note,
+/* start nav and note slightly lifted / smaller so they can animate in */
+.top-nav,
+.bottom-note {
+  transform: translateY(-0.5rem) scale(0.95);
+}
+
+/* first stage: show nav/note as soon as white reveal finishes */
+.reveal-done .top-nav,
+.reveal-done .bottom-note {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* final stage: reveal sections & footer once zoom has settled */
 .anim-done .section,
 .anim-done .site-footer {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* give the bottom note a tiny delay so the nav slides in first */
+.reveal-done .top-nav {
+  transition-delay: 0s;
+}
+.reveal-done .bottom-note {
+  transition-delay: 0.1s;
 }
 
 main {
@@ -180,7 +203,8 @@ a {
   left: 0;
   right: 0;
   top: 45vh;
-  transform: translateY(-50%) scale(0.82);
+  /* start noticeably smaller so the zoom feels more dramatic */
+  transform: translateY(-50%) scale(0.6);
   z-index: 6;
   display: grid;
   place-items: center;
@@ -209,9 +233,9 @@ a {
   color: rgba(245, 245, 245, 1);
 }
 
-/* Start slightly smaller + lower opacity, then zoom to final size after reveal */
+/* Start noticeably smaller + lower opacity, then zoom to final size after reveal */
 .center-name {
-  transform: translateY(-50%) scale(0.82);
+  transform: translateY(-50%) scale(0.6);
   opacity: 0.78;
   transition:
     transform 920ms cubic-bezier(0.16, 1, 0.3, 1),

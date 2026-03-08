@@ -46,7 +46,9 @@
   // and a quicker second phase into VEENHUIS.
   const baseTotalMs = 1500;
   const holdMs = 160;
-  const zoomDelayMs = 80;
+  // once the white wipe is finished we want to show nav/note right away
+  // and start the zoom immediately (no visible delay).
+  const zoomDelayMs = 0;
   const zoomSettleMs = 820;
 
   const phase1Ms = Math.round(baseTotalMs * 0.62);
@@ -81,11 +83,15 @@
     }
 
     // Finish reveal, then zoom and finally show the rest of the UI.
+    // finalise the wipe and immediately release the rest of the UI
     nameEl.style.setProperty("--reveal", "100%");
-    window.setTimeout(() => {
-      nameEl.classList.add("is-zoomed");
-      window.setTimeout(done, zoomSettleMs);
-    }, zoomDelayMs);
+    // fire off the nav/note reveal immediately
+    root.classList.add('reveal-done');
+
+    // start the zoom immediately (no delay) and mark full animation done
+    // after the zoom has settled
+    nameEl.classList.add("is-zoomed");
+    window.setTimeout(done, zoomSettleMs);
   };
 
   nameEl.style.setProperty("--reveal", "0%");
@@ -110,6 +116,10 @@
   function clamp(v, a, b) { return Math.min(Math.max(v, a), b); }
 
   function onScroll() {
+    // don't disturb the intro state; only allow scroll-driven transforms
+    // after the name has been allowed to zoom up
+    if (center && !center.classList.contains('is-zoomed')) return;
+
     if (ticking) return;
     ticking = true;
     requestAnimationFrame(() => {
@@ -180,6 +190,10 @@
   }
 
   function onScroll() {
+    // do not disturb the intro state; scrolling should only affect the name
+    // after it has been allowed to zoom
+    if (centerName && !centerName.classList.contains('is-zoomed')) return;
+
     if (ticking) return;
     ticking = true;
     window.requestAnimationFrame(() => {
