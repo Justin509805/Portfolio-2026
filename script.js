@@ -166,6 +166,8 @@
   const firstScreen = document.querySelector('.first-screen');
   const centerName = document.querySelector('.center-name');
   const topNav = document.querySelector('.top-nav');
+  const navName = document.querySelector('.nav-name');
+  const navLinkItems = document.querySelectorAll('.nav-links a');
   const bottomNote = document.querySelector('.bottom-note');
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -220,6 +222,28 @@
           bottomNote.style.filter = `blur(${progress * 2}px)`;
           bottomNote.style.opacity = `${1 - 0.4 * progress}`;
         }
+
+        // Nav-name subtle lift + tilt for a clean, unique scroll effect
+        if (navName) {
+          const nameLift = -10 * progress; // px upward
+          const nameScale = 1 - 0.02 * progress;
+          const nameTilt = -3 * progress; // deg
+          navName.style.transform = `translateY(${nameLift}px) scale(${nameScale}) rotateX(${nameTilt}deg)`;
+          navName.style.opacity = `${1 - 0.18 * progress}`;
+        }
+
+        // Nav links: staggered subtle parallax + tilt
+        if (navLinkItems && navLinkItems.length) {
+          navLinkItems.forEach((el, i) => {
+            const idx = i + 1;
+            const factor = idx / navLinkItems.length;
+            const y = -6 * progress * (1 + factor * 0.6); // staggered lift
+            const rot = -4 * progress * factor; // small rotation
+            const opa = 1 - 0.5 * progress * (0.6 + factor * 0.4);
+            el.style.transform = `translateY(${y}px) rotateX(${rot}deg)`;
+            el.style.opacity = `${opa}`;
+          });
+        }
       } else {
         // Clear inline styles to preserve initial reveal animation styles
         [centerName, bottomNote].forEach((el) => {
@@ -228,6 +252,16 @@
           el.style.filter = '';
           el.style.opacity = '';
         });
+        if (navName) {
+          navName.style.transform = '';
+          navName.style.opacity = '';
+        }
+        if (navLinkItems && navLinkItems.length) {
+          navLinkItems.forEach((el) => {
+            el.style.transform = '';
+            el.style.opacity = '';
+          });
+        }
       }
 
       ticking = false;

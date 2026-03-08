@@ -65,12 +65,12 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
+  overflow-x: hidden;
 }
 
-/* Gate: hide everything except centre name until reveal is complete */
+/* Gate: hide nav, bottom-note and footer until reveal is complete */
 .top-nav,
 .bottom-note,
-.section,
 .site-footer {
   opacity: 0;
   pointer-events: none;
@@ -157,10 +157,60 @@ a {
 .nav-name,
 .nav-links a {
   text-transform: uppercase;
-  letter-spacing: -0.03em; /* was 0.24em */
+  letter-spacing: -0.03em;
   font-size: 0.82rem;
   color: #fff;
 }
+
+/* Hover: make nav text a darker/softer gray at ~40% opacity for subtle feedback */
+.nav-name:hover,
+.nav-links a:hover {
+  color: rgba(245, 245, 245, 0.4);
+}
+
+/* Block roll-back reveal: start folded away (rotateX), then roll back into view */
+.nav-name,
+.nav-links a {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  transform-origin: top center;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  /* start folded and covered by the sliding block */
+  transform: perspective(600px) rotateX(75deg) translateY(-6px);
+  opacity: 0;
+}
+
+/* sliding cover pseudo-element that hides the text until it slides away */
+.nav-name::before,
+.nav-links a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  transform: translateX(0%);
+  transition: transform 520ms cubic-bezier(0.2, 0.85, 0.18, 1);
+}
+
+/* When the white reveal completes, roll items back (block-like) and slide the cover away */
+.reveal-done .nav-name,
+.reveal-done .nav-links a {
+  transform: perspective(600px) rotateX(0deg) translateY(0);
+  opacity: 1;
+  transition: transform 520ms cubic-bezier(0.2, 0.85, 0.18, 1), opacity 360ms ease-out;
+}
+.reveal-done .nav-name::before,
+.reveal-done .nav-links a::before {
+  transform: translateX(105%); /* slide cover out to the right */
+}
+
+/* Stagger the nav links cover sliding for rhythm */
+.reveal-done .nav-links a:nth-child(1)::before { transition-delay: 0.05s; }
+.reveal-done .nav-links a:nth-child(2)::before { transition-delay: 0.12s; }
+.reveal-done .nav-links a:nth-child(3)::before { transition-delay: 0.19s; }
+.reveal-done .nav-name::before { transition-delay: 0s; }
 
 .nav-year {
   justify-self: end;
@@ -202,7 +252,7 @@ a {
   position: fixed;
   left: 0;
   right: 0;
-  top: 45vh;
+  top: 40vh;
   /* start noticeably smaller so the zoom feels more dramatic */
   transform: translateY(-50%) scale(0.6);
   z-index: 6;
@@ -277,6 +327,23 @@ a {
   z-index: 15; /* sit above the fixed first-screen as it scrolls */
 }
 
+/* Make the content container span the full viewport width even when
+   its parent (`main`) applies inline padding. This ensures overlays and
+   grids can reach the viewport edges while inner elements can still use
+   their own padding if desired. */
+.content-container {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-inline: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure the content area does not introduce horizontal scroll */
+.content-container {
+  overflow-x: hidden;
+}
+
 /* Make all sections after the first-screen use the content background so they scroll together */
 .section:not(.first-screen) {
   background: var(--bg);
@@ -300,6 +367,12 @@ a {
   margin-top: 0;
   min-height: 100vh;
   overflow: visible;
+  /* make the overlay full-bleed while preserving inner padding for content */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  max-width: 100vw;
+  box-sizing: border-box;
   padding-inline: clamp(2rem, 5vw, 4.5rem);
   padding-top: 1.6rem;
   box-sizing: border-box;
@@ -324,12 +397,6 @@ a {
   margin-bottom: 2.5rem;
 }
 
-.section-header h2 {
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  margin: 0;
-}
 
 .section-header p {
   margin: 0;
@@ -340,11 +407,11 @@ a {
 
 /* Work section title tweaks */
 .section-work .section-header h2 {
-  font-size: clamp(1.15rem, 4.2vw, 1.9rem);
+  font-size: clamp(1.15rem, 4.2vw, 6.5rem);
   text-transform: none;
   letter-spacing: 0;
   color: #fff;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 /* Projects Grid */
