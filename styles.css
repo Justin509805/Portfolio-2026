@@ -339,12 +339,13 @@ a {
   box-sizing: border-box;
   /* Smooth scrolling when jumping to anchors inside the container */
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  max-width: 100vw; /* prevent horizontal overflow creating an inner scroll container */
 }
 
 /* Ensure the content area does not introduce horizontal scroll */
-.content-container {
-  overflow-x: hidden;
+ .content-container {
+  overflow: visible !important; /* ensure page scrolling remains on the root html/body */
+  max-height: none;
 }
 
 /* Make all sections after the first-screen use the content background so they scroll together */
@@ -710,6 +711,77 @@ a {
   font-size: 0.78rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+}
+
+/* Footer CTA styling */
+.site-footer .footer-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.site-footer .footer-cta h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.6rem, 4.6vw, 2.6rem);
+  line-height: 1;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.site-footer .footer-links {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.site-footer .footer-links .contact-link {
+  color: #fff;
+  font-size: 0.98rem;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.site-footer .footer-links .contact-link:hover,
+.site-footer .footer-links .contact-link:focus {
+  border-bottom-color: rgba(255,255,255,0.45);
+}
+
+.site-footer .footer-meta {
+  width: 100%;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 0.5rem;
+  padding-top: 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Reveal on scroll utilities */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px) translateZ(0);
+  will-change: opacity, transform;
+  transition: opacity 680ms cubic-bezier(0.16, 1, 0.3, 1), transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0) translateZ(0);
+}
+
+/* Slight scale + fade variant for larger containers */
+.reveal-scale {
+  transform: translateY(18px) scale(0.985);
+}
+.reveal-scale.revealed {
+  transform: translateY(0) scale(1);
+}
+
+/* Stagger helper when delays are set via CSS variables */
+.reveal-on-scroll {
+  transition-delay: var(--reveal-delay, 0ms);
 }
 
 /* Responsive */

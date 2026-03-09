@@ -98,6 +98,52 @@
   requestAnimationFrame(tick);
 })();
 
+/* Reveal-on-scroll behavior for content below the first screen
+   - Observes elements with the `reveal-on-scroll` class and adds `revealed`.
+   - Respects `prefers-reduced-motion` by revealing instantly.
+   - Supports optional `data-reveal-delay` (ms) or CSS `--reveal-delay`.
+*/
+(function () {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const root = document.documentElement;
+  const container = document.querySelector('.content-container') || document;
+  const items = Array.from(container.querySelectorAll('.reveal-on-scroll'));
+  if (!items.length) return;
+
+  if (prefersReducedMotion) {
+    items.forEach((el) => el.classList.add('revealed'));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        // prefer explicit data attribute, fall back to CSS var or 0
+        const attr = el.getAttribute('data-reveal-delay');
+        const delay = attr ? parseInt(attr, 10) || 0 : 0;
+
+        if (delay) {
+          // set CSS var too so transitions respect it
+          el.style.setProperty('--reveal-delay', `${delay}ms`);
+        }
+
+        // small timeout to allow delay to apply
+        window.setTimeout(() => {
+          el.classList.add('revealed');
+        }, delay);
+
+        observer.unobserve(el);
+      });
+    },
+    { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+  );
+
+  items.forEach((el) => observer.observe(el));
+})();
+
 /* Sticky-like center name behavior: shrink + blur as the #work section scrolls up
    The center name stays fixed in the viewport; when the work section's top
    moves from the bottom of the viewport into the top, we map that progress
