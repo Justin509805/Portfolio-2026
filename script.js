@@ -98,6 +98,45 @@
   requestAnimationFrame(tick);
 })();
 
+/* Mobile menu toggle: show/hide mobile full-screen menu and swap button text */
+(function () {
+  const navToggle = document.querySelector('.nav-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (!navToggle || !mobileMenu) return;
+
+  function setMenuOpen(open) {
+    document.documentElement.classList.toggle('menu-open', open);
+    navToggle.textContent = open ? 'CLOSE' : 'MENU';
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    if (open) {
+      // prevent body scroll while menu open
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  navToggle.addEventListener('click', () => {
+    const isOpen = document.documentElement.classList.contains('menu-open');
+    setMenuOpen(!isOpen);
+  });
+
+  // Close menu when clicking a link
+  mobileMenu.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (!a) return;
+    setMenuOpen(false);
+  });
+
+  // Close on escape
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.documentElement.classList.contains('menu-open')) {
+      setMenuOpen(false);
+    }
+  });
+})();
+
 /* Reveal-on-scroll behavior for content below the first screen
    - Observes elements with the `reveal-on-scroll` class and adds `revealed`.
    - Respects `prefers-reduced-motion` by revealing instantly.
