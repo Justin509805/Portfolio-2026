@@ -164,8 +164,11 @@ a {
 
 /* Hover: make nav text a darker/softer gray at ~40% opacity for subtle feedback */
 .nav-name:hover,
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-name:focus-visible,
+.nav-links a:focus-visible {
   color: rgba(245, 245, 245, 0.4);
+  opacity: 0.7;
 }
 
 /* Block roll-back reveal: start folded away (rotateX), then roll back into view */
@@ -199,7 +202,11 @@ a {
 .reveal-done .nav-links a {
   transform: perspective(600px) rotateX(0deg) translateY(0);
   opacity: 1;
-  transition: transform 520ms cubic-bezier(0.2, 0.85, 0.18, 1), opacity 360ms ease-out;
+  transition:
+    transform 520ms cubic-bezier(0.2, 0.85, 0.18, 1),
+    opacity 360ms ease-out,
+    color 180ms ease,
+    opacity 180ms ease;
 }
 .reveal-done .nav-name::before,
 .reveal-done .nav-links a::before {
@@ -241,6 +248,17 @@ a {
   grid-column: 3; /* place in the 3rd column of the top-nav grid */
   justify-self: end;
   align-self: center;
+  transition:
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.nav-toggle:hover,
+.nav-toggle:focus-visible {
+  color: rgba(245, 245, 245, 0.55);
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 /* Full-screen sliding mobile menu */
@@ -253,8 +271,12 @@ a {
   background: var(--bg);
   transform: translateY(-100%);
   opacity: 0;
-  visibility: hidden;
-  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1), opacity 320ms ease-out;
+  visibility: visible;
+  pointer-events: none;
+  transition:
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 320ms ease-out,
+    border-color 220ms ease-out;
   z-index: 140;
   display: flex;
   flex-direction: column;
@@ -292,7 +314,7 @@ a {
 .menu-open .mobile-menu {
   transform: translateY(0%);
   opacity: 1;
-  visibility: visible;
+  pointer-events: auto;
 }
 
 .top-nav a {
@@ -301,29 +323,21 @@ a {
 }
 
 .top-nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -0.2rem;
-  width: 0;
-  height: 1px;
-  background-color: var(--fg);
-  opacity: 0.7;
-  transition: width 200ms ease-out;
+  content: none;
 }
 
 .top-nav a:hover::after,
 .top-nav a:focus-visible::after {
-  width: 100%;
+  width: 0;
 }
 
 .center-name {
   position: fixed;
-  left: 0;
-  right: 0;
-  top: 40vh;
+  left: 50%;
+  right: auto;
+  top: 50%;
   /* start noticeably smaller so the zoom feels more dramatic */
-  transform: translateY(-50%) scale(0.6);
+  transform: translate(-50%, -50%) scale(0.6);
   z-index: 6;
   display: grid;
   place-items: center;
@@ -354,7 +368,7 @@ a {
 
 /* Start noticeably smaller + lower opacity, then zoom to final size after reveal */
 .center-name {
-  transform: translateY(-50%) scale(0.6);
+  transform: translate(-50%, -50%) scale(0.6);
   opacity: 0.78;
   transition:
     transform 920ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -362,7 +376,7 @@ a {
 }
 
 .center-name.is-zoomed {
-  transform: translateY(-50%) scale(1);
+  transform: translate(-50%, -50%) scale(1);
   opacity: 1;
 }
 
@@ -890,6 +904,10 @@ a {
     font-size: 0.78rem;
   }
 
+  .nav-year {
+    display: none;
+  }
+
   .section-header {
     flex-direction: column;
     align-items: flex-start;
@@ -909,7 +927,7 @@ a {
   }
 
   .center-name {
-    top: 38vh;
+    top: 50%;
     font-size: clamp(2rem, 12vw, 4.2rem);
   }
 
@@ -920,9 +938,29 @@ a {
     background: transparent;
   }
 
-  /* Ensure mobile menu sits above other fixed UI */
   .mobile-menu {
     z-index: 200;
+    top: 4.9rem;
+    height: calc(100dvh - 4.9rem);
+    transform: translateY(-104%);
+    border-bottom: 0 solid transparent;
+  }
+
+  .mobile-menu .mobile-links {
+    justify-content: flex-start;
+    padding-top: 1.25rem;
+  }
+
+  .mobile-menu .mobile-links a {
+    padding: 0.9rem 1.4rem;
+    font-size: clamp(2.2rem, 9vw, 3.2rem);
+    letter-spacing: -0.03em;
+    border-bottom: none;
+    white-space: nowrap;
+  }
+
+  .menu-open .mobile-menu {
+    border-bottom: 1px solid var(--border-subtle);
   }
 }
 

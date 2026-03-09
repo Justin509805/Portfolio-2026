@@ -1,4 +1,48 @@
 /**
+ * Shared image pool for hero interactions.
+ */
+const PORTFOLIO_IMAGE_FILES = [
+  "buurt-1.png",
+  "buurt-2.png",
+  "buurt-3.png",
+  "buurt-4.png",
+  "funnelflow-1.png",
+  "graphicdesign-1.png",
+  "graphicdesign-2.png",
+  "graphicdesign-3.png",
+  "hwwig-2.png",
+  "hwwig-3.png",
+  "oldportfolio-1.png",
+  "oldportfolio-2.png",
+  "strive-1.png",
+  "strive-2.png",
+  "strive-3.png",
+  "studentevents-1.png",
+  "studentevents-2.png",
+  "synq-1.png",
+  "synq-2.png"
+];
+
+const getImageSeriesKey = (fileName) =>
+  fileName.replace(/\.[^.]+$/, "").replace(/-\d+$/, "").toLowerCase();
+
+const pickNextPortfolioImage = (previousFile) => {
+  const previousSeries = previousFile ? getImageSeriesKey(previousFile) : "";
+  let candidates = PORTFOLIO_IMAGE_FILES.filter(
+    (fileName) =>
+      fileName !== previousFile && getImageSeriesKey(fileName) !== previousSeries
+  );
+
+  if (!candidates.length) {
+    candidates = PORTFOLIO_IMAGE_FILES.filter(
+      (fileName) => fileName !== previousFile
+    );
+  }
+
+  return candidates[Math.floor(Math.random() * candidates.length)];
+};
+
+/**
  * Name reveal animation for the first screen.
  * Requirements:
  * - Name starts smaller + lower opacity
@@ -18,8 +62,50 @@
   if (!nameEl) return;
 
   const fullName = (nameEl.getAttribute("data-name") || "JUSTIN VEENHUIS").trim();
-  nameEl.textContent = fullName;
+  const [firstName = "JUSTIN", ...restParts] = fullName.split(/\s+/);
+  const lastName = restParts.join(" ") || "VEENHUIS";
   nameEl.setAttribute("aria-label", fullName);
+  nameEl.setAttribute("data-first", firstName);
+  nameEl.setAttribute("data-last", lastName);
+
+  nameEl.innerHTML = `
+    <div class="name-content" aria-hidden="true">
+      <div class="name-inline-wrap">
+        <span class="name-text name-text--dim">${fullName}</span>
+        <span class="name-text name-text--reveal">${fullName}</span>
+      </div>
+      <div class="name-stack">
+        <div class="name-line-wrap name-line-wrap--first">
+          <span class="name-line name-line--dim">${firstName}</span>
+          <span class="name-line name-line--reveal">${firstName}</span>
+        </div>
+        <div class="name-image-shell" aria-hidden="true">
+          <img class="name-rotator" src="./img/funnelflow-1.png" alt="" />
+        </div>
+        <div class="name-line-wrap name-line-wrap--last">
+          <span class="name-line name-line--dim">${lastName}</span>
+          <span class="name-line name-line--reveal">${lastName}</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const nameImage = nameEl.querySelector(".name-rotator");
+
+  let currentImage = "funnelflow-1.png";
+
+  const swapCenterImage = () => {
+    if (!nameImage) return;
+    const nextImage = pickNextPortfolioImage(currentImage);
+    if (!nextImage || nextImage === currentImage) return;
+
+    nameImage.classList.add("is-switching");
+    window.setTimeout(() => {
+      nameImage.src = `./img/${nextImage}`;
+      currentImage = nextImage;
+      nameImage.classList.remove("is-switching");
+    }, 120);
+  };
 
   const done = () => {
     root.classList.add("anim-done");
@@ -31,6 +117,8 @@
     done();
     return;
   }
+
+  window.setInterval(swapCenterImage, 1200);
 
   // Smooth continuous reveal using a CSS mask variable (--reveal: 0% → 100%).
   // Timing model:
@@ -96,6 +184,148 @@
 
   nameEl.style.setProperty("--reveal", "0%");
   requestAnimationFrame(tick);
+})();
+
+/* Desktop cursor image interaction for the first screen */
+(function () {
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+  const desktopQuery = window.matchMedia("(min-width: 1200.01px)");
+
+  const stage = document.querySelector(".cursor-image-stage");
+  const firstScreen = document.querySelector(".first-screen");
+
+  if (!stage || !firstScreen || prefersReducedMotion) return;
+
+  let pointerInside = false;
+  let currentFile = "funnelflow-1.png";
+  let activeCard = null;
+  let lastSpawnAt = 0;
+  let lastMoveAt = 0;
+  let lastX = 0;
+  let lastY = 0;
+  let cardIndex = 0;
+
+  const updateStageVisibility = () => {
+    const rect = firstScreen.getBoundingClientRect();
+    const inHero = rect.bottom > 0 && rect.top < window.innerHeight;
+    const shouldShow = desktopQuery.matches && pointerInside && inHero;
+    stage.classList.toggle("is-active", shouldShow);
+  };
+
+  const closeCard = (card) => {
+    if (!card) return;
+    if (card.classList.contains("is-closing")) return;
+    if (card._closeTimer) {
+      window.clearTimeout(card._closeTimer);
+      card._closeTimer = null;
+    }
+    card.classList.remove("is-visible");
+    card.classList.add("is-closing");
+    window.setTimeout(() => {
+      if (card.parentNode) {
+        card.parentNode.removeChild(card);
+      }
+    }, 560);
+  };
+
+  const closeAllCards = () => {
+    stage.querySelectorAll(".cursor-image-card").forEach((card) => {
+      closeCard(card);
+    });
+  };
+
+  const openCardAt = (x, y) => {
+    const nextFile = pickNextPortfolioImage(currentFile);
+    if (!nextFile) return;
+
+    const card = document.createElement("div");
+    card.className = "cursor-image-card";
+    card.style.left = `${x}px`;
+    card.style.top = `${y}px`;
+    card.style.zIndex = `${cardIndex++}`;
+
+    const img = document.createElement("img");
+    img.src = `./img/${nextFile}`;
+    img.alt = "";
+    img.draggable = false;
+    card.appendChild(img);
+
+    stage.appendChild(card);
+    currentFile = nextFile;
+
+    activeCard = card;
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        card.classList.add("is-visible");
+      });
+    });
+
+    card._closeTimer = window.setTimeout(() => {
+      closeCard(card);
+      if (activeCard === card) {
+        activeCard = null;
+      }
+    }, 500);
+  };
+
+  const handlePointerMove = (event) => {
+    if (!desktopQuery.matches || !pointerInside) return;
+
+    const now = performance.now();
+    const dx = event.clientX - lastX;
+    const dy = event.clientY - lastY;
+    const dt = Math.max(now - lastMoveAt, 16);
+    const distance = Math.hypot(dx, dy);
+    const speed = distance / dt;
+
+    lastX = event.clientX;
+    lastY = event.clientY;
+    lastMoveAt = now;
+
+    // Faster movement lowers the delay aggressively, while smaller/slower
+    // movement still produces images with a short pause between them.
+    const spawnCooldown = Math.max(42, Math.min(165, 128 - speed * 62));
+    const minDistance = Math.max(3, Math.min(10, 8 - speed * 1.8));
+
+    if (now - lastSpawnAt < spawnCooldown || distance < minDistance) {
+      return;
+    }
+
+    lastSpawnAt = now;
+    openCardAt(event.clientX + 24, event.clientY + 18);
+  };
+
+  firstScreen.addEventListener("pointerenter", (event) => {
+    pointerInside = true;
+    lastX = event.clientX;
+    lastY = event.clientY;
+    lastMoveAt = performance.now();
+    updateStageVisibility();
+  });
+
+  firstScreen.addEventListener("pointerleave", () => {
+    pointerInside = false;
+    updateStageVisibility();
+    closeAllCards();
+    activeCard = null;
+  });
+
+  firstScreen.addEventListener("pointermove", handlePointerMove);
+
+  window.addEventListener("scroll", updateStageVisibility, { passive: true });
+  window.addEventListener("resize", updateStageVisibility);
+  desktopQuery.addEventListener("change", () => {
+    if (!desktopQuery.matches) {
+      closeAllCards();
+      activeCard = null;
+    }
+    updateStageVisibility();
+  });
+
+  updateStageVisibility();
 })();
 
 /* Mobile menu toggle: show/hide mobile full-screen menu and swap button text */
@@ -221,7 +451,7 @@
       const blur = 6 * progress;
       const opacity = 1 - 0.35 * progress;
 
-      center.style.transform = `translateY(-50%) scale(${scale})`;
+      center.style.transform = `translate(-50%, -50%) scale(${scale})`;
       center.style.filter = `blur(${blur}px)`;
       center.style.opacity = `${opacity}`;
 
@@ -297,7 +527,7 @@
         const centerOpacity = 1 - 0.35 * progress;
         if (centerName) {
           // preserve vertical centering while scaling
-          centerName.style.transform = `translateY(-50%) scale(${centerScale})`;
+          centerName.style.transform = `translate(-50%, -50%) scale(${centerScale})`;
           centerName.style.filter = `blur(${centerBlur}px)`;
           centerName.style.opacity = `${centerOpacity}`;
         }

@@ -1,37 +1,208 @@
 :root {
   --name-dim: rgba(245, 245, 245, 0.22);
   --name-white: rgba(245, 245, 245, 1);
+  --name-image-width: clamp(10rem, 18vw, 15rem);
+  --name-image-ratio: 1.6;
+  --name-stack-gap: clamp(0.8rem, 1.8vw, 1.35rem);
+  --name-inline-size: clamp(3.6rem, 7vw, 6.25rem);
 }
 
-/* Ensure the name is always a single left-to-right line */
 .center-name {
-  white-space: nowrap;
+  width: auto;
   direction: ltr;
   position: relative;
   --reveal: 0%;
+  color: transparent;
+  white-space: normal;
+  overflow: visible;
+  padding-top: 6.5rem;
+}
+
+.name-content {
+  position: relative;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.name-inline-wrap {
+  position: relative;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.name-text {
+  display: block;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  font-size: var(--name-inline-size);
+  padding-inline: 0.08em;
+}
+
+.name-text--dim {
   color: var(--name-dim);
 }
 
-/* White overlay revealed left → right, driven by --reveal from script.js */
-.center-name::before {
-  content: attr(data-name);
+.name-text--reveal {
   position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
+  inset: 0 auto auto 0;
+  width: var(--reveal);
+  overflow: hidden;
   color: var(--name-white);
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    #000 0,
-    #000 var(--reveal),
-    transparent var(--reveal)
-  );
-  mask-image: linear-gradient(
-    90deg,
-    #000 0,
-    #000 var(--reveal),
-    transparent var(--reveal)
-  );
 }
 
+.name-stack {
+  display: none;
+}
+
+.name-line-wrap {
+  position: relative;
+  width: max-content;
+  max-width: 100%;
+  text-align: center;
+  display: flex;
+  min-height: 1.2em;
+}
+
+.name-line-wrap--first {
+  align-items: flex-end;
+}
+
+.name-line-wrap--last {
+  align-items: flex-start;
+}
+
+.name-line {
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  font-size: clamp(3rem, 8vw, 6rem);
+  position: relative;
+  padding-inline: 0.08em;
+}
+
+.name-line--dim {
+  color: var(--name-dim);
+}
+
+.name-line--reveal {
+  color: var(--name-white);
+  position: absolute;
+  inset: 0 auto auto 0;
+  overflow: hidden;
+  width: var(--reveal);
+}
+
+.name-image-shell {
+  position: relative;
+  width: var(--name-image-width);
+  aspect-ratio: var(--name-image-ratio);
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.name-rotator {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 120ms ease-out;
+}
+
+.name-rotator.is-switching {
+  opacity: 0.7;
+}
+
+.cursor-image-stage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 7;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 360ms ease-out;
+  overflow: hidden;
+}
+
+.cursor-image-stage.is-active {
+  opacity: 1;
+}
+
+.cursor-image-card {
+  position: absolute;
+  width: clamp(13rem, 22vw, 21rem);
+  aspect-ratio: 1.6;
+  overflow: hidden;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  transition:
+    opacity 420ms ease-out,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.cursor-image-card.is-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.cursor-image-card.is-closing {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.76);
+}
+
+.cursor-image-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 1200px) {
+  .center-name {
+    width: min(88vw, 34rem);
+    padding-top: 6.5rem;
+  }
+
+  .name-inline-wrap {
+    display: none;
+  }
+
+  .name-stack {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--name-stack-gap);
+    width: max-content;
+    max-width: 100%;
+    margin-inline: auto;
+    padding-block: clamp(0.45rem, 1vw, 0.85rem);
+  }
+
+  .name-line {
+    font-size: clamp(2.5rem, 9.5vw, 5.25rem);
+  }
+
+  .name-stack {
+    gap: clamp(0.65rem, 2vw, 1rem);
+  }
+
+  .cursor-image-stage {
+    display: none;
+  }
+
+  :root {
+    --name-image-width: clamp(8.5rem, 28vw, 13rem);
+  }
+}
