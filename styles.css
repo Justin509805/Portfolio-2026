@@ -332,11 +332,14 @@ a {
    grids can reach the viewport edges while inner elements can still use
    their own padding if desired. */
 .content-container {
-  width: 100%;
-  margin-left: 0;
-  margin-right: 0;
+  width: calc(100% + 2 * clamp(2rem, 5vw, 4.5rem));
+  margin-left: calc(-1 * clamp(2rem, 5vw, 4.5rem));
+  margin-right: calc(-1 * clamp(2rem, 5vw, 4.5rem));
   padding-inline: 0;
   box-sizing: border-box;
+  /* Smooth scrolling when jumping to anchors inside the container */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Ensure the content area does not introduce horizontal scroll */
@@ -379,6 +382,17 @@ a {
   background: var(--content-bg);
 }
 
+/* Make About and Contact sections full-bleed like the work overlay
+   so their inner content aligns with the project grid. */
+.section-about,
+.section-contact {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  box-sizing: border-box;
+  padding-inline: clamp(2rem, 5vw, 4.5rem);
+}
+
 /* Ensure first-screen content sits below the overlay visually */
 .first-screen {
   position: fixed;
@@ -392,9 +406,9 @@ a {
 .section-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 1.5rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 
@@ -412,6 +426,7 @@ a {
   letter-spacing: 0;
   color: #fff;
   font-weight: 400;
+  margin: 0;
 }
 
 /* Projects Grid */
@@ -419,18 +434,15 @@ a {
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.8rem;
+  gap: clamp(1rem, 2.5vw, 1.8rem);
 }
 
 .project-card {
-  border-radius: 1.4rem;
-  border: 1px solid var(--border-subtle);
+  border: none;
   overflow: hidden;
-  background: radial-gradient(
-    circle at top left,
-    rgba(255, 255, 255, 0.04),
-    #050505
-  );
+  background: none;
+  height: 90vh;
+  margin: 0;
 }
 
 .project-link {
@@ -441,16 +453,28 @@ a {
 
 .project-media {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  flex: 1 1 auto;
+  min-height: 0;
   background-size: cover;
   background-position: center;
-  filter: grayscale(100%);
   transform-origin: center;
-  transition:
-    transform 260ms ease-out,
-    filter 260ms ease-out,
-    opacity 260ms ease-out;
-  opacity: 0.9;
+  transition: transform 260ms ease-out, opacity 260ms ease-out;
+  opacity: 0.98;
+
+  /* Reset default <figure> spacing so cards have no unexpected margins */
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.project-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: transform 260ms ease-out, filter 260ms ease-out, opacity 260ms ease-out;
+  transform: scale(1);
 }
 
 .project-media--one {
@@ -494,10 +518,12 @@ a {
 }
 
 .project-meta {
-  padding: 1.4rem 1.4rem 1.2rem;
+  padding-top: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  background: transparent;
+  color: #fff;
 }
 
 .project-title-row {
@@ -509,9 +535,10 @@ a {
 
 .project-title-row h3 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 500;
   letter-spacing: 0.06em;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
 }
 
@@ -522,29 +549,48 @@ a {
 
 .project-tags {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--muted);
 }
 
-.project-card:hover .project-media,
-.project-card:focus-within .project-media {
+.project-card:hover .project-media img,
+.project-card:focus-within .project-media img {
   transform: scale(1.03);
   filter: grayscale(0%);
   opacity: 1;
 }
 
-.project-card:hover,
-.project-card:focus-within {
-  border-color: var(--accent-soft);
+.project-card:hover .project-meta h3,
+.project-card:focus-within .project-meta h3 {
+  text-decoration: underline;
 }
 
-.project-card:hover .project-meta,
-.project-card:focus-within .project-meta {
-  background: radial-gradient(
-    circle at top left,
-    rgba(255, 255, 255, 0.04),
-    transparent 55%
-  );
+/* See all link */
+.see-all-wrap {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+.see-all {
+  color: #fff;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.see-all:hover,
+.see-all:focus {
+  border-bottom-color: rgba(255,255,255,0.6);
+}
+
+@media (max-width: 900px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  .project-card {
+    height: 70vh;
+  }
 }
 
 /* About */
