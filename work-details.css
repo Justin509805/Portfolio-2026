@@ -171,6 +171,86 @@
         text-transform: uppercase;
       }
 
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .all-works-page .all-works-section-title {
+        margin: 0;
+        color: #fff;
+        font-size: clamp(1.6rem, 4vw, 3rem);
+        font-weight: 500;
+        letter-spacing: -0.04em;
+      }
+
+      .all-works-page .all-works-filters-section {
+        padding-top: 4rem;
+        padding-bottom: 2rem;
+      }
+
+      .all-works-page .all-works-grid-section {
+        padding-top: 2rem;
+      }
+
+      .all-works-page .all-works-grid {
+        padding-bottom: 0;
+      }
+
+      .all-works-page .all-works-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+
+      .all-works-page .work-filter {
+        appearance: none;
+        border: 1px solid var(--border-subtle);
+        background: transparent;
+        color: rgba(255, 255, 255, 0.74);
+        padding: 0.8rem 1rem;
+        font: inherit;
+        font-size: 0.92rem;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition:
+          color 220ms ease,
+          border-color 220ms ease,
+          background-color 220ms ease,
+          transform 220ms ease;
+      }
+
+      .all-works-page .work-filter:hover,
+      .all-works-page .work-filter:focus-visible {
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.26);
+        transform: translateY(-1px);
+      }
+
+      .all-works-page .work-filter.is-active {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+
+      .all-works-page .work-card[hidden] {
+        display: none;
+      }
+
+      .all-works-page .all-works-empty {
+        margin: 1.5rem 0 0;
+        color: var(--muted);
+        font-size: 0.98rem;
+      }
+
       @media (max-width: 960px) {
         .detail-intro,
         .detail-meta,
@@ -191,5 +271,14 @@
 
         .detail-title {
           font-size: clamp(2.4rem, 13vw, 4rem);
+        }
+
+        .all-works-page .all-works-filters {
+          gap: 0.65rem;
+        }
+
+        .all-works-page .work-filter {
+          width: 100%;
+          text-align: left;
         }
       }

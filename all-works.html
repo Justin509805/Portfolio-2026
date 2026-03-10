@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" class="project-detail-page all-works-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Works - Portfolio</title>
+    <meta
+      name="description"
+      content="All portfolio projects with category filters for browsing different types of work."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="work-details.css" />
+  </head>
+  <body class="project-detail-body">
+    <nav class="top-nav" aria-label="Primary">
+      <a class="nav-name" href="index.html" aria-label="Home">JUSTIN VEENHUIS</a>
+      <div class="nav-links">
+        <a href="all-works.html" aria-current="page">Work</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-menu">
+        MENU
+      </button>
+      <div id="mobile-menu" class="mobile-menu" role="dialog" aria-hidden="true">
+        <div class="mobile-links">
+          <a href="all-works.html" aria-current="page">Work</a>
+          <a href="index.html#about">About</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+      </div>
+      <div class="nav-year">ALL WORKS</div>
+    </nav>
+
+    <main class="project-detail-main">
+      <section class="detail-hero section" aria-labelledby="project-title">
+        <p class="detail-eyebrow detail-load" style="--load-delay: 40ms">
+          Portfolio Archive
+        </p>
+        <h1
+          id="project-title"
+          class="detail-title detail-load"
+          style="--load-delay: 110ms"
+        >
+          All Works
+        </h1>
+
+        <div class="detail-intro detail-load" style="--load-delay: 180ms">
+          <p class="detail-description">
+            This page brings all of my projects together in one place while keeping the
+            same visual language as the individual project pages. The layout uses the same
+            portfolio cards as the selected work section on the homepage.
+          </p>
+          <p class="detail-description">
+            Use the filters below to switch between project types. The page opens on
+            All Works by default so the full overview is visible immediately.
+          </p>
+        </div>
+
+        <div class="detail-meta all-works-meta">
+          <div class="detail-meta-item detail-load" style="--load-delay: 240ms">
+            <p class="detail-meta-label">Projects</p>
+            <p class="detail-meta-value">4 Available Works</p>
+          </div>
+          <div class="detail-meta-item detail-load" style="--load-delay: 320ms">
+            <p class="detail-meta-label">Browse By</p>
+            <p class="detail-meta-value">Responsive, Website, App, Graphic Design</p>
+          </div>
+          <div class="detail-meta-item detail-load" style="--load-delay: 400ms">
+            <p class="detail-meta-label">Active Filter</p>
+            <p class="detail-meta-value" id="active-filter-label">All Works</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="all-works-filters-section section" aria-labelledby="filter-title">
+        <div class="section-header reveal-on-scroll" data-reveal-delay="0">
+          <h2 id="filter-title" class="all-works-section-title">Browse by type</h2>
+          <a
+            href="index.html#work"
+            class="see-all reveal-on-scroll"
+            data-reveal-delay="80"
+          >
+            Back to selected work
+          </a>
+        </div>
+
+        <div
+          class="all-works-filters reveal-on-scroll"
+          data-reveal-delay="120"
+          role="tablist"
+          aria-label="Project type filters"
+        >
+          <button
+            type="button"
+            class="work-filter is-active"
+            data-filter="all"
+            aria-pressed="true"
+          >
+            All Works
+          </button>
+          <button
+            type="button"
+            class="work-filter"
+            data-filter="responsive-design"
+            aria-pressed="false"
+          >
+            Responsive Design
+          </button>
+          <button
+            type="button"
+            class="work-filter"
+            data-filter="website-design"
+            aria-pressed="false"
+          >
+            Website Design
+          </button>
+          <button
+            type="button"
+            class="work-filter"
+            data-filter="app-design"
+            aria-pressed="false"
+          >
+            App Design
+          </button>
+          <button
+            type="button"
+            class="work-filter"
+            data-filter="graphic-design"
+            aria-pressed="false"
+          >
+            Graphic Design
+          </button>
+        </div>
+      </section>
+
+      <section class="all-works-grid-section section" aria-labelledby="all-works-grid-title">
+        <h2 id="all-works-grid-title" class="sr-only">All portfolio projects</h2>
+
+        <div class="projects-grid all-works-grid">
+          <article
+            class="project-card work-card reveal-on-scroll"
+            data-reveal-delay="0"
+            data-categories="responsive-design website-design"
+          >
+            <a href="funnelflow.html" class="project-link">
+              <figure class="project-media project-media--one">
+                <img src="img/newfunnelflow-1.png" alt="Funnelflow Dashboard preview" />
+              </figure>
+              <div class="project-meta">
+                <div class="project-title-row">
+                  <h3>Funnelflow Dashboard</h3>
+                  <span class="project-year">2025-2026</span>
+                </div>
+                <p class="project-tags">
+                  Personal Project · Responsive Design · Vue Application
+                </p>
+              </div>
+            </a>
+          </article>
+
+          <article
+            class="project-card work-card reveal-on-scroll"
+            data-reveal-delay="80"
+            data-categories="graphic-design"
+          >
+            <a href="hollandplafond-brochure.html" class="project-link">
+              <figure class="project-media project-media--two">
+                <img src="img/brochure-3.png" alt="Hollandplafond Brochure preview" />
+              </figure>
+              <div class="project-meta">
+                <div class="project-title-row">
+                  <h3>Hollandplafond Brochure</h3>
+                  <span class="project-year">2025-2026</span>
+                </div>
+                <p class="project-tags">Personal Project · Graphic Design</p>
+              </div>
+            </a>
+          </article>
+
+          <article
+            class="project-card work-card reveal-on-scroll"
+            data-reveal-delay="160"
+            data-categories="app-design"
+          >
+            <a href="strive.html" class="project-link">
+              <figure class="project-media project-media--three">
+                <img src="img/newstrive-4.png" alt="Strive app preview" />
+              </figure>
+              <div class="project-meta">
+                <div class="project-title-row">
+                  <h3>Strive</h3>
+                  <span class="project-year">2024</span>
+                </div>
+                <p class="project-tags">Personal Project · App Design</p>
+              </div>
+            </a>
+          </article>
+
+          <article
+            class="project-card work-card reveal-on-scroll"
+            data-reveal-delay="240"
+            data-categories="website-design"
+          >
+            <a href="studentevents.html" class="project-link">
+              <figure class="project-media project-media--four">
+                <img src="img/newstudentevents-1.png" alt="StudentEvents website preview" />
+              </figure>
+              <div class="project-meta">
+                <div class="project-title-row">
+                  <h3>StudentEvents</h3>
+                  <span class="project-year">2023</span>
+                </div>
+                <p class="project-tags">Group Project · Website Design</p>
+              </div>
+            </a>
+          </article>
+        </div>
+
+        <p class="all-works-empty reveal-on-scroll" data-empty-state hidden>
+          No projects match this filter yet.
+        </p>
+      </section>
+
+      <footer class="detail-footer reveal-on-scroll" data-reveal-delay="120">
+        <span>All works overview page</span>
+      </footer>
+    </main>
+
+    <script>
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          document.documentElement.classList.add("reveal-done");
+          document.documentElement.classList.add("project-detail-ready");
+          window.setTimeout(() => {
+            document.documentElement.classList.add("anim-done");
+          }, 420);
+        });
+      });
+
+      (() => {
+        const filterButtons = Array.from(document.querySelectorAll(".work-filter"));
+        const cards = Array.from(document.querySelectorAll(".work-card"));
+        const activeFilterLabel = document.getElementById("active-filter-label");
+        const emptyState = document.querySelector("[data-empty-state]");
+
+        if (!filterButtons.length || !cards.length) return;
+
+        const applyFilter = (filterValue, buttonLabel) => {
+          let visibleCount = 0;
+
+          cards.forEach((card) => {
+            const categories = (card.dataset.categories || "").split(/\s+/).filter(Boolean);
+            const matches = filterValue === "all" || categories.includes(filterValue);
+
+            card.hidden = !matches;
+
+            if (matches) {
+              visibleCount += 1;
+            }
+          });
+
+          filterButtons.forEach((button) => {
+            const isActive = button.dataset.filter === filterValue;
+            button.classList.toggle("is-active", isActive);
+            button.setAttribute("aria-pressed", isActive ? "true" : "false");
+          });
+
+          if (activeFilterLabel) {
+            activeFilterLabel.textContent = buttonLabel;
+          }
+
+          if (emptyState) {
+            emptyState.hidden = visibleCount !== 0;
+          }
+        };
+
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            applyFilter(button.dataset.filter || "all", button.textContent.trim());
+          });
+        });
+
+        applyFilter("all", "All Works");
+      })();
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
