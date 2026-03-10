@@ -94,13 +94,8 @@ const pickNextPortfolioImage = (previousFile) => {
     if (!nameImage) return;
     const nextImage = pickNextPortfolioImage(currentImage);
     if (!nextImage || nextImage === currentImage) return;
-
-    nameImage.classList.add("is-switching");
-    window.setTimeout(() => {
-      nameImage.src = `./img/${nextImage}`;
-      currentImage = nextImage;
-      nameImage.classList.remove("is-switching");
-    }, 120);
+    nameImage.src = `./img/${nextImage}`;
+    currentImage = nextImage;
   };
 
   const done = () => {
