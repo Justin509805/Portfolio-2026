@@ -2,25 +2,21 @@
  * Shared image pool for hero interactions.
  */
 const PORTFOLIO_IMAGE_FILES = [
-  "buurt-1.png",
-  "buurt-2.png",
-  "buurt-3.png",
-  "buurt-4.png",
-  "funnelflow-1.png",
-  "graphicdesign-1.png",
-  "graphicdesign-2.png",
-  "graphicdesign-3.png",
-  "hwwig-2.png",
-  "hwwig-3.png",
-  "oldportfolio-1.png",
-  "oldportfolio-2.png",
-  "strive-1.png",
-  "strive-2.png",
-  "strive-3.png",
-  "studentevents-1.png",
-  "studentevents-2.png",
-  "synq-1.png",
-  "synq-2.png"
+  "newfunnelflow-1.png",
+  "newfunnelflow-2.png",
+  "newfunnelflow-3.png",
+  "newfunnelflow-4.png",
+  "newstrive-1.png",
+  "newstrive-2.png",
+  "newstrive-3.png",
+  "newstudentevents-1.png",
+  "newstudentevents-2.png",
+  "newsynq-1.png",
+  "newsynq-2.png",
+  "newsynq-3.png",
+  "newhwwig-1.png",
+  "newhwwig-2.png",
+  "newhwwig-3.png"
 ];
 
 const getImageSeriesKey = (fileName) =>
