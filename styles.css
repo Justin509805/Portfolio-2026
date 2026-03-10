@@ -335,7 +335,7 @@ a {
   position: fixed;
   left: 50%;
   right: auto;
-  top: 50%;
+  top: 60%;
   /* start noticeably smaller so the zoom feels more dramatic */
   transform: translate(-50%, -50%) scale(0.6);
   z-index: 6;

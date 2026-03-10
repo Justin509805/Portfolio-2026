@@ -15,7 +15,7 @@
   color: transparent;
   white-space: normal;
   overflow: visible;
-  padding-top: 6.5rem;
+  padding-top: 10rem;
 }
 
 .name-content {
@@ -170,7 +170,7 @@
 @media (max-width: 1200px) {
   .center-name {
     width: min(88vw, 34rem);
-    padding-top: 6.5rem;
+    padding-top: 10rem;
   }
 
   .name-inline-wrap {

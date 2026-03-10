@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" class="reveal-done anim-done project-detail-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Funnelflow - Project Detail</title>
+    <meta
+      name="description"
+      content="Funnelflow project detail page showcasing process, deliverables, and gallery imagery."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .project-detail-body {
+        background: var(--bg);
+        color: #fff;
+      }
+
+      .project-detail-main {
+        margin-top: 0;
+        padding-top: 7.5rem;
+        padding-inline: clamp(2rem, 5vw, 4.5rem);
+        padding-bottom: 6rem;
+      }
+
+      .project-detail-page .top-nav {
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+      }
+
+      .project-detail-page .section,
+      .project-detail-page .site-footer {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .detail-hero {
+        padding-top: 2rem;
+        padding-bottom: 4rem;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .detail-eyebrow {
+        margin: 0 0 1.5rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: -0.03em;
+        font-size: 0.84rem;
+      }
+
+      .detail-title {
+        margin: 0;
+        font-size: clamp(3rem, 8vw, 7rem);
+        line-height: 0.94;
+        font-weight: 500;
+        letter-spacing: -0.04em;
+      }
+
+      .detail-intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(16rem, 0.7fr);
+        gap: 3rem;
+        margin-top: 2rem;
+        align-items: start;
+      }
+
+      .detail-description {
+        max-width: 46rem;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 1.05rem;
+        line-height: 1.7;
+      }
+
+      .detail-meta {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        padding-top: 1rem;
+      }
+
+      .detail-meta-item {
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-subtle);
+      }
+
+      .detail-meta-label {
+        margin: 0 0 0.45rem;
+        color: var(--muted);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: -0.03em;
+      }
+
+      .detail-meta-value {
+        margin: 0;
+        color: #fff;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .detail-gallery {
+        padding-block: 4rem;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .detail-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+
+      .detail-gallery-item {
+        margin: 0;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .detail-gallery-item--large {
+        grid-column: 1 / -1;
+      }
+
+      .detail-gallery-item img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .detail-gallery-item--large img {
+        aspect-ratio: 16 / 9;
+      }
+
+      .detail-gallery-item--small img {
+        aspect-ratio: 4 / 5;
+      }
+
+      .more-projects {
+        padding-top: 4rem;
+      }
+
+      .more-projects-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.2rem;
+        margin-top: 1.5rem;
+      }
+
+      .more-projects .project-card {
+        height: auto;
+      }
+
+      .more-projects .project-media {
+        aspect-ratio: 4 / 5;
+      }
+
+      .detail-footer {
+        padding-top: 4rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 960px) {
+        .detail-intro,
+        .detail-meta,
+        .more-projects-grid,
+        .detail-gallery-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .project-detail-main {
+          padding-top: 6.75rem;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .project-detail-main {
+          padding-inline: 1.4rem;
+        }
+
+        .detail-title {
+          font-size: clamp(2.4rem, 13vw, 4rem);
+        }
+      }
+    </style>
+  </head>
+  <body class="project-detail-body">
+    <nav class="top-nav" aria-label="Primary">
+      <a class="nav-name" href="index.html" aria-label="Home">JUSTIN VEENHUIS</a>
+      <div class="nav-links">
+        <a href="index.html#work">Work</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-menu">
+        MENU
+      </button>
+      <div id="mobile-menu" class="mobile-menu" role="dialog" aria-hidden="true">
+        <div class="mobile-links">
+          <a href="index.html#work">Work</a>
+          <a href="index.html#about">About</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+      </div>
+      <div class="nav-year">FUNNELFLOW</div>
+    </nav>
+
+    <main class="project-detail-main">
+      <section class="detail-hero section" aria-labelledby="project-title">
+        <p class="detail-eyebrow">Selected Project</p>
+        <h1 id="project-title" class="detail-title">Funnelflow</h1>
+
+        <div class="detail-intro">
+          <p class="detail-description">
+            Funnelflow is a clean, conversion-focused web experience designed to
+            guide users through a clear product story. The concept balances bold
+            visual structure with restrained interaction, creating a modern
+            interface that feels direct, efficient, and easy to navigate.
+          </p>
+          <p class="detail-description">
+            This project focused on creating a clear landing flow, a consistent
+            visual rhythm, and a flexible responsive system that could support
+            future growth across campaign, product, and brand touchpoints.
+          </p>
+        </div>
+
+        <div class="detail-meta">
+          <div class="detail-meta-item">
+            <p class="detail-meta-label">Year</p>
+            <p class="detail-meta-value">2025-2026</p>
+          </div>
+          <div class="detail-meta-item">
+            <p class="detail-meta-label">Deliverables</p>
+            <p class="detail-meta-value">Responsive Design, Vue Application</p>
+          </div>
+          <div class="detail-meta-item">
+            <p class="detail-meta-label">Project Type</p>
+            <p class="detail-meta-value">Personal Work (Internship)</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-gallery section" aria-label="Project gallery">
+        <div class="detail-gallery-grid">
+          <figure class="detail-gallery-item detail-gallery-item--large">
+            <img src="img/newfunnelflow-1.png" alt="Funnelflow hero overview" />
+          </figure>
+          <figure class="detail-gallery-item detail-gallery-item--small">
+            <img src="img/newfunnelflow-2.png" alt="Funnelflow detail view one" />
+          </figure>
+          <figure class="detail-gallery-item detail-gallery-item--small">
+            <img src="img/newfunnelflow-3.png" alt="Funnelflow detail view two" />
+          </figure>
+          <figure class="detail-gallery-item detail-gallery-item--large">
+            <img src="img/newfunnelflow-4.png" alt="Funnelflow hero overview" />
+          </figure>
+        </div>
+      </section>
+
+      <section class="more-projects section" aria-labelledby="more-projects-title">
+        <div class="section-header">
+          <h2 id="more-projects-title">More projects</h2>
+          <a href="index.html#work" class="see-all">Back to selected work</a>
+        </div>
+
+        <div class="more-projects-grid">
+          <article class="project-card">
+            <a href="funnelflow.html" class="project-link">
+              <figure class="project-media">
+                <img src="img/funnelflow-1.png" alt="Funnelflow project preview" />
+              </figure>
+              <div class="project-meta">
+                <div class="project-title-row">
+                  <h3>Funnelflow</h3>
+                </div>
+                <p class="project-tags">Responsive Design · Website</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="project-card">
+            <a href="#" class="project-link">
+              <figure class="project-media">
+                <img src="img/funnelflow-1.png" alt="Editorial Commerce preview" />
+              </figure>
+              <div class="project-meta">
+                <div class="project-title-row">
+                  <h3>Editorial Commerce</h3>
+                </div>
+                <p class="project-tags">Art Direction · UI Concept</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="project-card">
+            <a href="#" class="project-link">
+              <figure class="project-media">
+                <img src="img/funnelflow-1.png" alt="System Archive preview" />
+              </figure>
+              <div class="project-meta">
+                <div class="project-title-row">
+                  <h3>System Archive</h3>
+                </div>
+                <p class="project-tags">Product Design · Case Study</p>
+              </div>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <footer class="detail-footer">
+        <span>Project detail page for Funnelflow</span>
+      </footer>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
