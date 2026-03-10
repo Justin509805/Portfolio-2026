@@ -333,15 +333,12 @@ a {
 
 .center-name {
   position: fixed;
-  left: 50%;
-  right: auto;
-  top: 60%;
-  --home-enter-y: 0px;
-  /* start noticeably smaller so the zoom feels more dramatic */
-  transform: translate(-50%, calc(-50% + var(--home-enter-y))) scale(0.6);
+  inset: 0;
   z-index: 6;
   display: grid;
   place-items: center;
+  width: 100vw;
+  height: 100vh;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 600;
@@ -369,19 +366,27 @@ a {
 
 /* Start noticeably smaller + lower opacity, then zoom to final size after reveal */
 .center-name {
-  transform: translate(-50%, calc(-50% + var(--home-enter-y))) scale(0.6);
+  transition: none;
+}
+
+.center-name .name-content {
+  --home-enter-y: 0px;
+  --home-small-offset-y: 3.5vh;
+  transform: translateY(calc(var(--home-enter-y) + var(--home-small-offset-y)))
+    scale(0.6);
   opacity: 0.78;
+  transform-origin: center center;
   transition:
     transform 920ms cubic-bezier(0.16, 1, 0.3, 1),
     opacity 920ms ease-out;
 }
 
-.home-from-logo .center-name {
+.home-from-logo .center-name .name-content {
   --home-enter-y: -24vh;
 }
 
-.center-name.is-zoomed {
-  transform: translate(-50%, -50%) scale(1);
+.center-name.is-zoomed .name-content {
+  transform: translateY(0) scale(1);
   opacity: 1;
 }
 
@@ -932,12 +937,15 @@ a {
   }
 
   .center-name {
-    top: 50%;
     font-size: clamp(2rem, 12vw, 4.2rem);
   }
 
-  .home-from-logo .center-name {
+  .home-from-logo .center-name .name-content {
     --home-enter-y: -18vh;
+  }
+
+  .center-name .name-content {
+    --home-small-offset-y: 2.4vh;
   }
 
   /* Show toggle on mobile */

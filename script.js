@@ -420,8 +420,9 @@ const pickNextPortfolioImage = (previousFile) => {
   if (prefersReducedMotion) return;
 
   const center = document.querySelector('.center-name');
+  const centerContent = center ? center.querySelector('.name-content') : null;
   const work = document.querySelector('#work');
-  if (!center || !work) return;
+  if (!center || !centerContent || !work) return;
 
   let ticking = false;
 
@@ -448,9 +449,9 @@ const pickNextPortfolioImage = (previousFile) => {
       const blur = 6 * progress;
       const opacity = 1 - 0.35 * progress;
 
-      center.style.transform = `translate(-50%, -50%) scale(${scale})`;
-      center.style.filter = `blur(${blur}px)`;
-      center.style.opacity = `${opacity}`;
+      centerContent.style.transform = `translateY(0) scale(${scale})`;
+      centerContent.style.filter = `blur(${blur}px)`;
+      centerContent.style.opacity = `${opacity}`;
 
       ticking = false;
     });
@@ -477,6 +478,7 @@ const pickNextPortfolioImage = (previousFile) => {
 
   const firstScreen = document.querySelector('.first-screen');
   const centerName = document.querySelector('.center-name');
+  const centerContent = centerName ? centerName.querySelector('.name-content') : null;
   const bottomNote = document.querySelector('.bottom-note');
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -519,11 +521,10 @@ const pickNextPortfolioImage = (previousFile) => {
         const centerScale = 1 - 0.18 * progress;
         const centerBlur = progress * 6; // px
         const centerOpacity = 1 - 0.35 * progress;
-        if (centerName) {
-          // preserve vertical centering while scaling
-          centerName.style.transform = `translate(-50%, -50%) scale(${centerScale})`;
-          centerName.style.filter = `blur(${centerBlur}px)`;
-          centerName.style.opacity = `${centerOpacity}`;
+        if (centerContent) {
+          centerContent.style.transform = `translateY(0) scale(${centerScale})`;
+          centerContent.style.filter = `blur(${centerBlur}px)`;
+          centerContent.style.opacity = `${centerOpacity}`;
         }
 
         if (bottomNote) {
@@ -533,7 +534,7 @@ const pickNextPortfolioImage = (previousFile) => {
         }
       } else {
         // Clear inline styles to preserve initial reveal animation styles
-        [centerName, bottomNote].forEach((el) => {
+        [centerContent, bottomNote].forEach((el) => {
           if (!el) return;
           el.style.transform = '';
           el.style.filter = '';

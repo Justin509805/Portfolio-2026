@@ -8,19 +8,22 @@
 }
 
 .center-name {
-  width: auto;
+  width: 100vw;
+  height: 100vh;
   direction: ltr;
-  position: relative;
+  position: fixed;
+  inset: 0;
   --reveal: 0%;
   color: transparent;
   white-space: normal;
   overflow: visible;
-  padding-top: 10rem;
+  padding-top: 0;
 }
 
 .name-content {
   position: relative;
-  display: block;
+  display: grid;
+  place-items: center;
   width: max-content;
   max-width: 100%;
   margin-inline: auto;
@@ -28,7 +31,8 @@
 
 .name-inline-wrap {
   position: relative;
-  display: block;
+  display: grid;
+  place-items: center;
   width: max-content;
   max-width: 100%;
   margin-inline: auto;
@@ -38,10 +42,11 @@
   display: block;
   white-space: nowrap;
   text-align: center;
-  line-height: 1.5;
+  line-height: 1;
   letter-spacing: 0.02em;
   font-size: var(--name-inline-size);
   padding-inline: 0;
+  padding-block: 0;
 }
 
 .name-text--dim {
@@ -158,9 +163,9 @@
 }
 
 @media (max-width: 1200px) {
-  .center-name {
+  .center-name .name-content {
     width: min(88vw, 34rem);
-    padding-top: 10rem;
+    padding-top: 0;
   }
 
   .name-inline-wrap {
