@@ -1,0 +1,195 @@
+
+      .project-detail-body {
+        background: var(--bg);
+        color: #fff;
+      }
+
+      #project-title {
+        margin-bottom: 2rem;
+      }
+
+      .project-detail-main {
+        margin-top: 0;
+        padding-top: 7.5rem;
+        padding-inline: clamp(2rem, 5vw, 4.5rem);
+        padding-bottom: 6rem;
+      }
+
+      .project-detail-page .top-nav {
+        pointer-events: none;
+      }
+
+      .project-detail-page.reveal-done .top-nav {
+        pointer-events: auto;
+      }
+
+      .detail-hero {
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .detail-eyebrow {
+        margin: 0 0 1.5rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: -0.03em;
+        font-size: 0.84rem;
+      }
+
+      .detail-title {
+        margin: 0;
+        font-size: clamp(3rem, 8vw, 7rem);
+        line-height: 0.94;
+        font-weight: 500;
+        letter-spacing: -0.04em;
+      }
+
+      .detail-load {
+        opacity: 0;
+        transform: translateY(22px) scale(0.985);
+        transition:
+          opacity 760ms cubic-bezier(0.16, 1, 0.3, 1),
+          transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+        transition-delay: var(--load-delay, 0ms);
+        will-change: opacity, transform;
+      }
+
+      .project-detail-page.project-detail-ready .detail-load {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      .detail-intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(16rem, 0.7fr);
+        gap: 3rem;
+        margin-top: 2rem;
+        align-items: start;
+      }
+
+      .detail-description {
+        max-width: 46rem;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 1.05rem;
+        line-height: 1.7;
+      }
+
+      .detail-meta {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        padding-top: 3rem;
+      }
+
+      .detail-meta-item {
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-subtle);
+      }
+
+      .detail-meta-label {
+        margin: 0 0 0.45rem;
+        color: var(--muted);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: -0.03em;
+      }
+
+      .detail-meta-value {
+        margin: 0;
+        color: #fff;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .detail-gallery {
+        padding-block: 4rem;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .detail-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+
+      .detail-gallery-item {
+        margin: 0;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .detail-gallery-item--large {
+        grid-column: 1 / -1;
+      }
+
+      .detail-gallery-item img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .detail-gallery-item:hover img {
+        transform: scale(1.02);
+      }
+
+      .detail-gallery-item--large img {
+        aspect-ratio: 16 / 9;
+      }
+
+      .detail-gallery-item--small img {
+        aspect-ratio: 4 / 5;
+      }
+
+      .more-projects {
+        padding-top: 4rem;
+      }
+
+      .more-projects-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.2rem;
+        margin-top: 1.5rem;
+      }
+
+      .more-projects .project-card {
+        height: auto;
+      }
+
+      .more-projects .project-media {
+        aspect-ratio: 4 / 5;
+      }
+
+      .detail-footer {
+        padding-top: 4rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 960px) {
+        .detail-intro,
+        .detail-meta,
+        .more-projects-grid,
+        .detail-gallery-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .project-detail-main {
+          padding-top: 6.75rem;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .project-detail-main {
+          padding-inline: 1.4rem;
+        }
+
+        .detail-title {
+          font-size: clamp(2.4rem, 13vw, 4rem);
+        }
+      }
