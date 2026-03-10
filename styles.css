@@ -336,8 +336,9 @@ a {
   left: 50%;
   right: auto;
   top: 60%;
+  --home-enter-y: 0px;
   /* start noticeably smaller so the zoom feels more dramatic */
-  transform: translate(-50%, -50%) scale(0.6);
+  transform: translate(-50%, calc(-50% + var(--home-enter-y))) scale(0.6);
   z-index: 6;
   display: grid;
   place-items: center;
@@ -368,11 +369,15 @@ a {
 
 /* Start noticeably smaller + lower opacity, then zoom to final size after reveal */
 .center-name {
-  transform: translate(-50%, -50%) scale(0.6);
+  transform: translate(-50%, calc(-50% + var(--home-enter-y))) scale(0.6);
   opacity: 0.78;
   transition:
     transform 920ms cubic-bezier(0.16, 1, 0.3, 1),
     opacity 920ms ease-out;
+}
+
+.home-from-logo .center-name {
+  --home-enter-y: -24vh;
 }
 
 .center-name.is-zoomed {
@@ -929,6 +934,10 @@ a {
   .center-name {
     top: 50%;
     font-size: clamp(2rem, 12vw, 4.2rem);
+  }
+
+  .home-from-logo .center-name {
+    --home-enter-y: -18vh;
   }
 
   /* Show toggle on mobile */

@@ -251,9 +251,55 @@
         font-size: 0.98rem;
       }
 
+      .contact-page .contact-portrait-section {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+      }
+
+      .contact-page .contact-portrait {
+        margin: 0;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .contact-page .contact-portrait img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+      }
+
+      .contact-page .contact-details-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        padding-top: 4rem;
+      }
+
+      .contact-page .contact-card {
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-subtle);
+      }
+
+      .contact-page .contact-card-label {
+        margin: 0 0 0.45rem;
+        color: var(--muted);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: -0.03em;
+      }
+
+      .contact-page .contact-card-value {
+        margin: 0;
+        color: #fff;
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
       @media (max-width: 960px) {
         .detail-intro,
         .detail-meta,
+        .contact-page .contact-details-grid,
         .more-projects-grid,
         .detail-gallery-grid {
           grid-template-columns: 1fr;

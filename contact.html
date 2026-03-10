@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" class="project-detail-page contact-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact - Justin Veenhuis</title>
+    <meta
+      name="description"
+      content="Contact page for Justin Veenhuis with basic information and portrait."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="work-details.css" />
+  </head>
+  <body class="project-detail-body">
+    <nav class="top-nav" aria-label="Primary">
+      <a class="nav-name" href="index.html?from=logo" aria-label="Home">JUSTIN VEENHUIS</a>
+      <div class="nav-links">
+        <a href="all-works.html">Work</a>
+        <a href="index.html#about">About</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </div>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-menu">
+        MENU
+      </button>
+      <div id="mobile-menu" class="mobile-menu" role="dialog" aria-hidden="true">
+        <div class="mobile-links">
+          <a href="all-works.html">Work</a>
+          <a href="index.html#about">About</a>
+          <a href="contact.html" aria-current="page">Contact</a>
+        </div>
+      </div>
+      <div class="nav-year">CONTACT</div>
+    </nav>
+
+    <main class="project-detail-main">
+      <section class="detail-hero section" aria-labelledby="project-title">
+        <p class="detail-eyebrow detail-load" style="--load-delay: 40ms">Get in touch</p>
+        <h1
+          id="project-title"
+          class="detail-title detail-load"
+          style="--load-delay: 110ms"
+        >
+          Contact
+        </h1>
+
+        <div class="detail-intro detail-load" style="--load-delay: 180ms">
+          <p class="detail-description">
+            I am Justin Veenhuis, a media design student focused on webdesign,
+            front-end development, and visual design. I enjoy building clean digital
+            experiences with strong typography, structure, and interaction.
+          </p>
+          <p class="detail-description">
+            If you want to talk about a project, internship, collaboration, or just want
+            to connect, you can reach me through the details below.
+          </p>
+        </div>
+
+        <div class="detail-meta">
+          <div class="detail-meta-item detail-load" style="--load-delay: 240ms">
+            <p class="detail-meta-label">Location</p>
+            <p class="detail-meta-value">Son en Breugel, The Netherlands</p>
+          </div>
+          <div class="detail-meta-item detail-load" style="--load-delay: 320ms">
+            <p class="detail-meta-label">Email</p>
+            <p class="detail-meta-value">justinv.zakelijk@gmail.com</p>
+          </div>
+          <div class="detail-meta-item detail-load" style="--load-delay: 400ms">
+            <p class="detail-meta-label">Phone</p>
+            <p class="detail-meta-value">+31 6 1937 0325</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-portrait-section section" aria-label="Portrait">
+        <figure
+          class="contact-portrait reveal-on-scroll reveal-scale"
+          data-reveal-delay="0"
+        >
+          <img src="img/Myself.png" alt="Portrait of Justin Veenhuis" />
+        </figure>
+
+        <div class="contact-details-grid">
+          <article class="contact-card reveal-on-scroll" data-reveal-delay="60">
+            <p class="contact-card-label">LinkedIn</p>
+            <p class="contact-card-value">
+              <a
+                href="https://www.linkedin.com/in/justin-veenhuis-403a9b2a0/"
+                target="_blank"
+                rel="noopener"
+              >
+                justin-veenhuis-403a9b2a0
+              </a>
+            </p>
+          </article>
+
+          <article class="contact-card reveal-on-scroll" data-reveal-delay="140">
+            <p class="contact-card-label">Study</p>
+            <p class="contact-card-value">HBO-ICT Media Design at Fontys</p>
+          </article>
+
+          <article class="contact-card reveal-on-scroll" data-reveal-delay="220">
+            <p class="contact-card-label">Focus</p>
+            <p class="contact-card-value">Webdesign, Front-end Development, Graphic Design</p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="detail-footer reveal-on-scroll" data-reveal-delay="120">
+        <span>Contact page for Justin Veenhuis</span>
+      </footer>
+    </main>
+
+    <script>
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          document.documentElement.classList.add("reveal-done");
+          document.documentElement.classList.add("project-detail-ready");
+          window.setTimeout(() => {
+            document.documentElement.classList.add("anim-done");
+          }, 420);
+        });
+      });
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
