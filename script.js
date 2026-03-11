@@ -364,6 +364,87 @@ const pickNextPortfolioImage = (previousFile) => {
   });
 })();
 
+/* Desktop custom cursor: blend-mode dot that expands on interactive elements */
+(function () {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  if (prefersReducedMotion || !finePointerQuery.matches) return;
+
+  const cursor = document.createElement("div");
+  cursor.className = "custom-cursor";
+
+  const cursorLabel = document.createElement("div");
+  cursorLabel.className = "custom-cursor-label";
+
+  document.body.appendChild(cursor);
+  document.body.appendChild(cursorLabel);
+
+  document.documentElement.classList.add("has-custom-cursor");
+
+  let x = window.innerWidth / 2;
+  let y = window.innerHeight / 2;
+  let rafId = 0;
+
+  const interactiveSelector = "a, button, .project-link, .project-card";
+
+  const render = () => {
+    cursor.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+    cursorLabel.style.transform = cursorLabel.classList.contains("is-visible")
+      ? `translate(${x}px, ${y}px) translate(-50%, -50%) scale(1)`
+      : `translate(${x}px, ${y}px) translate(-50%, -50%) scale(0.9)`;
+    rafId = 0;
+  };
+
+  const queueRender = () => {
+    if (rafId) return;
+    rafId = window.requestAnimationFrame(render);
+  };
+
+  const setState = (element) => {
+    const projectTarget = element?.closest(".project-link, .project-card");
+    const linkTarget = element?.closest(".see-all, .nav-links a, .mobile-links a, .contact-link, .nav-name, .nav-toggle");
+
+    cursor.classList.remove("is-project", "is-link");
+    cursorLabel.classList.remove("is-visible");
+    cursorLabel.textContent = "";
+
+    if (projectTarget) {
+      cursor.classList.add("is-project");
+      cursorLabel.classList.add("is-visible");
+      cursorLabel.textContent = "View";
+      return;
+    }
+
+    if (linkTarget) {
+      cursor.classList.add("is-link");
+    }
+  };
+
+  document.addEventListener("pointermove", (event) => {
+    x = event.clientX;
+    y = event.clientY;
+    cursor.classList.add("is-visible");
+    setState(event.target);
+    queueRender();
+  });
+
+  document.addEventListener("pointerleave", () => {
+    cursor.classList.remove("is-visible", "is-project", "is-link");
+    cursorLabel.classList.remove("is-visible");
+  });
+
+  document.addEventListener("pointerover", (event) => {
+    const target = event.target.closest(interactiveSelector);
+    setState(target || event.target);
+  });
+
+  finePointerQuery.addEventListener("change", (event) => {
+    if (event.matches) return;
+    cursor.remove();
+    cursorLabel.remove();
+  });
+})();
+
 /* Reveal-on-scroll behavior for content below the first screen
    - Observes elements with the `reveal-on-scroll` class and adds `revealed`.
    - Respects `prefers-reduced-motion` by revealing instantly.
