@@ -382,7 +382,7 @@ a {
 }
 
 .home-from-logo .center-name .name-content {
-  --home-enter-y: -24vh;
+  --home-enter-y: -4vh;
 }
 
 .center-name.is-zoomed .name-content {
@@ -945,7 +945,7 @@ a {
   }
 
   .center-name .name-content {
-    --home-small-offset-y: 2.4vh;
+    --home-small-offset-y: 1.7vh;
   }
 
   /* Show toggle on mobile */
