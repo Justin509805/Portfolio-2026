@@ -27,7 +27,7 @@
   width: max-content;
   max-width: 100%;
   margin-inline: auto;
-  height: 100%;
+  padding-top: 0.08em;
 }
 
 .name-inline-wrap {
@@ -43,7 +43,7 @@
   display: block;
   white-space: nowrap;
   text-align: center;
-  line-height: 1;
+  line-height: 1.4;
   letter-spacing: 0.02em;
   font-size: var(--name-inline-size);
   padding-inline: 0;
