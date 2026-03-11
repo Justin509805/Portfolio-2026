@@ -27,6 +27,7 @@
   width: max-content;
   max-width: 100%;
   margin-inline: auto;
+  height: 100%;
 }
 
 .name-inline-wrap {
