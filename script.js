@@ -364,6 +364,77 @@ const pickNextPortfolioImage = (previousFile) => {
   });
 })();
 
+/* Image preview modal for resume links */
+(function () {
+  const modal = document.querySelector("[data-image-preview-modal]");
+  if (!modal) return;
+
+  const previewImage = modal.querySelector("[data-image-preview-image]");
+  const downloadLink = modal.querySelector("[data-image-preview-download]");
+  const closeTargets = Array.from(
+    modal.querySelectorAll("[data-image-preview-close]")
+  );
+  const triggers = Array.from(
+    document.querySelectorAll("[data-preview-image-trigger]")
+  );
+
+  if (!previewImage || !downloadLink || !triggers.length) return;
+
+  let closeTimer = 0;
+
+  const closeModal = () => {
+    modal.classList.remove("is-visible");
+    window.clearTimeout(closeTimer);
+    closeTimer = window.setTimeout(() => {
+      modal.hidden = true;
+      previewImage.src = "";
+      previewImage.alt = "";
+      downloadLink.href = "";
+      document.body.style.overflow = "";
+    }, 280);
+  };
+
+  const openModal = ({ src, alt, downloadName }) => {
+    window.clearTimeout(closeTimer);
+    previewImage.src = src;
+    previewImage.alt = alt || "Preview image";
+    downloadLink.href = src;
+    if (downloadName) {
+      downloadLink.setAttribute("download", downloadName);
+    } else {
+      downloadLink.removeAttribute("download");
+    }
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        modal.classList.add("is-visible");
+      });
+    });
+  };
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      openModal({
+        src: trigger.getAttribute("data-preview-image-src") || trigger.getAttribute("href") || "",
+        alt: trigger.getAttribute("data-preview-image-alt") || "",
+        downloadName: trigger.getAttribute("data-preview-download-name") || ""
+      });
+    });
+  });
+
+  closeTargets.forEach((target) => {
+    target.addEventListener("click", closeModal);
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.hidden) {
+      closeModal();
+    }
+  });
+})();
+
 /* Desktop custom cursor: blend-mode dot that expands on interactive elements */
 (function () {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -402,7 +473,9 @@ const pickNextPortfolioImage = (previousFile) => {
 
   const setState = (element) => {
     const projectTarget = element?.closest(".project-link, .project-card");
-    const linkTarget = element?.closest(".see-all, .nav-links a, .mobile-links a, .contact-link, .nav-name, .nav-toggle");
+    const linkTarget = element?.closest(
+      ".see-all, .nav-links a, .mobile-links a, .contact-link, .nav-name, .nav-toggle, .image-preview-close, .image-preview-download, a, button"
+    );
 
     cursor.classList.remove("is-project", "is-link");
     cursorLabel.classList.remove("is-visible");
