@@ -450,14 +450,9 @@ a {
 /* Work overlay: slides up over the first screen */
 .section-work {
   position: relative;
-  /* overlay handles padding while spacer preserves flow */
+  /* overlay handles its own spacing and full-bleed layout */
   padding: 0;
   border-top: 1px solid var(--border-subtle);
-}
-
-.section-work .work-spacer {
-  height: 100vh; /* filled by JS to match overlay content on load/resize */
-  width: 100%;
 }
 
 .work-overlay {

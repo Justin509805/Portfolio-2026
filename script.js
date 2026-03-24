@@ -620,15 +620,13 @@ const pickNextPortfolioImage = (previousFile) => {
 /* Sliding selected work overlay + scroll-driven blur/scale
    - Pins .work-overlay and moves its top from 100vh → 0vh while scrolling
    - Applies blur/scale to .center-name, .top-nav, .bottom-note based on progress
-   - Computes .work-spacer height so the document scroll covers overlay content
 */
 (function () {
   const workSection = document.querySelector('.section-work');
   if (!workSection) return;
 
   const workOverlay = workSection.querySelector('.work-overlay');
-  const workSpacer = workSection.querySelector('.work-spacer');
-  if (!workOverlay || !workSpacer) return;
+  if (!workOverlay) return;
 
   const firstScreen = document.querySelector('.first-screen');
   const centerName = document.querySelector('.center-name');
@@ -639,22 +637,12 @@ const pickNextPortfolioImage = (previousFile) => {
   if (prefersReducedMotion) {
     // If user prefers reduced motion, keep overlay in normal flow and don't pin it.
     workOverlay.style.position = 'relative';
-    workOverlay.style.top = '';
     workOverlay.style.height = 'auto';
     workOverlay.style.overflow = 'visible';
-    workSpacer.style.height = 'auto';
     return;
   }
 
   let ticking = false;
-
-  function updateSpacer() {
-    // Make spacer large enough so the document scroll covers the overlay content.
-    // Total scroll for this section should allow the overlay's internal scroll.
-    const overlayContentHeight = workOverlay.scrollHeight;
-    // spacer = viewport + overlay content height gives room for pinning + internal scroll
-    workSpacer.style.height = `${window.innerHeight + overlayContentHeight}px`;
-  }
 
   function onScroll() {
     // do not disturb the intro state; scrolling should only affect the name
@@ -667,9 +655,6 @@ const pickNextPortfolioImage = (previousFile) => {
       const scrollY = window.scrollY || window.pageYOffset;
       const firstH = firstScreen ? firstScreen.offsetHeight : window.innerHeight;
       const progress = Math.min(Math.max(scrollY / firstH, 0), 1);
-
-      // Move overlay top from 100vh -> 0vh
-      workOverlay.style.top = `${100 - progress * 100}vh`;
 
       if (progress > 0.0001) {
         const centerScale = 1 - 0.18 * progress;
@@ -701,12 +686,10 @@ const pickNextPortfolioImage = (previousFile) => {
   }
 
   window.addEventListener('load', () => {
-    updateSpacer();
     onScroll();
   });
 
   window.addEventListener('resize', () => {
-    updateSpacer();
     onScroll();
   });
 
