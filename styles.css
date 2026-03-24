@@ -34,6 +34,7 @@
   --bg: #0f0f0f;
   --fg: #0d0b0b;
   --muted: #a0a0a0;
+  --nav-height: clamp(4.5rem, 7vw, 5.75rem);
   --nav-offset: 4rem;
   --border-subtle: rgba(255, 255, 255, 0.08);
   --accent-soft: rgba(255, 255, 255, 0.2);
@@ -56,6 +57,7 @@ body {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + 1rem);
 }
 
 body {
@@ -114,7 +116,7 @@ main {
 }
 
 section {
-  scroll-margin-top: 6rem;
+  scroll-margin-top: calc(var(--nav-height) + 1rem);
 }
 
 a {
@@ -133,7 +135,7 @@ a {
   height: 100vh;
   z-index: 5;
   display: grid;
-  padding-top: var(--nav-offset);
+  padding-top: calc(var(--nav-height) + 0.5rem);
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -149,8 +151,10 @@ a {
   gap: 1.25rem;
   padding: 1.5rem clamp(2rem, 5vw, 4.5rem);
   margin-inline: 0;
-  background: var(--bg);
-  backdrop-filter: none;
+  min-height: var(--nav-height);
+  background: rgba(15, 15, 15, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
   box-sizing: border-box;
 }
 
@@ -470,6 +474,10 @@ a {
   padding-top: 1.6rem;
   box-sizing: border-box;
   background: var(--content-bg);
+}
+
+#top {
+  scroll-margin-top: 0;
 }
 
 /* Make About and Contact sections full-bleed like the work overlay
