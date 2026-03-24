@@ -364,66 +364,6 @@ const pickNextPortfolioImage = (previousFile) => {
   });
 })();
 
-/* Smooth scroll for all same-page hash links, including overlay sections */
-(function () {
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-
-  const getScrollTarget = (hash) => {
-    if (!hash || hash === "#") return null;
-    return document.querySelector(hash);
-  };
-
-  const getNavOffset = () => {
-    const nav = document.querySelector(".top-nav");
-    return nav ? nav.getBoundingClientRect().height + 16 : 16;
-  };
-
-  const scrollToHash = (hash, updateHistory = true) => {
-    const target = getScrollTarget(hash);
-    if (!target) return false;
-
-    const targetTop = hash === "#top"
-      ? 0
-      : Math.max(
-          target.getBoundingClientRect().top + window.pageYOffset - getNavOffset(),
-          0
-        );
-
-    window.scrollTo({
-      top: targetTop,
-      behavior: prefersReducedMotion ? "auto" : "smooth"
-    });
-
-    if (updateHistory) {
-      window.history.pushState(null, "", hash);
-    }
-
-    return true;
-  };
-
-  document.addEventListener("click", (event) => {
-    const link = event.target.closest('a[href^="#"]');
-    if (!link) return;
-
-    const href = link.getAttribute("href");
-    if (!href || href === "#") return;
-
-    if (!getScrollTarget(href)) return;
-
-    event.preventDefault();
-    scrollToHash(href);
-  });
-
-  window.addEventListener("load", () => {
-    if (!window.location.hash) return;
-    window.setTimeout(() => {
-      scrollToHash(window.location.hash, false);
-    }, 80);
-  });
-})();
-
 /* Image preview modal for resume links */
 (function () {
   const modal = document.querySelector("[data-image-preview-modal]");
@@ -624,107 +564,37 @@ const pickNextPortfolioImage = (previousFile) => {
   items.forEach((el) => observer.observe(el));
 })();
 
-/* Sticky-like center name behavior: shrink + blur as the #work section scrolls up
-   The center name stays fixed in the viewport; when the work section's top
-   moves from the bottom of the viewport into the top, we map that progress
-   (0 → 1) to scale/blur values.
-*/
+/* Scroll-driven parallax: blur/scale the hero name and bottom note as user
+   scrolls toward the work section. Single consolidated handler. */
 (function () {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReducedMotion) return;
 
-  const center = document.querySelector('.center-name');
-  const centerContent = center ? center.querySelector('.name-content') : null;
-  const work = document.querySelector('#work');
-  if (!center || !centerContent || !work) return;
-
-  let ticking = false;
-
-  function clamp(v, a, b) { return Math.min(Math.max(v, a), b); }
-
-  function onScroll() {
-    // don't disturb the intro state; only allow scroll-driven transforms
-    // after the name has been allowed to zoom up
-    if (center && !center.classList.contains('is-zoomed')) return;
-
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      const rect = work.getBoundingClientRect();
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-
-      // progress = 0 when work.top === vh (just below viewport)
-      // progress = 1 when work.top === 0 (aligned with viewport top)
-      let progress = (vh - rect.top) / vh;
-      progress = clamp(progress, 0, 1);
-
-      // Map progress to scale (1 -> 0.82) and blur (0 -> 6px)
-      const scale = 1 - 0.18 * progress;
-      const blur = 6 * progress;
-      const opacity = 1 - 0.35 * progress;
-
-      centerContent.style.transform = `translateY(0) scale(${scale})`;
-      centerContent.style.filter = `blur(${blur}px)`;
-      centerContent.style.opacity = `${opacity}`;
-
-      ticking = false;
-    });
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-  // Run once on load to set initial state
-  window.addEventListener('load', onScroll);
-})();
-
-/* Sliding selected work overlay + scroll-driven blur/scale
-   - Pins .work-overlay and moves its top from 100vh → 0vh while scrolling
-   - Applies blur/scale to .center-name, .top-nav, .bottom-note based on progress
-*/
-(function () {
-  const workSection = document.querySelector('.section-work');
-  if (!workSection) return;
-
-  const workOverlay = workSection.querySelector('.work-overlay');
-  if (!workOverlay) return;
-
-  const firstScreen = document.querySelector('.first-screen');
   const centerName = document.querySelector('.center-name');
   const centerContent = centerName ? centerName.querySelector('.name-content') : null;
   const bottomNote = document.querySelector('.bottom-note');
-
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReducedMotion) {
-    // If user prefers reduced motion, keep overlay in normal flow and don't pin it.
-    workOverlay.style.position = 'relative';
-    workOverlay.style.height = 'auto';
-    workOverlay.style.overflow = 'visible';
-    return;
-  }
+  const firstScreen = document.querySelector('.first-screen');
+  if (!centerName || !centerContent || !firstScreen) return;
 
   let ticking = false;
 
   function onScroll() {
-    // do not disturb the intro state; scrolling should only affect the name
-    // after it has been allowed to zoom
-    if (centerName && !centerName.classList.contains('is-zoomed')) return;
-
+    if (!centerName.classList.contains('is-zoomed')) return;
     if (ticking) return;
     ticking = true;
-    window.requestAnimationFrame(() => {
+
+    requestAnimationFrame(() => {
       const scrollY = window.scrollY || window.pageYOffset;
-      const firstH = firstScreen ? firstScreen.offsetHeight : window.innerHeight;
-      const progress = Math.min(Math.max(scrollY / firstH, 0), 1);
+      const heroH = firstScreen.offsetHeight || window.innerHeight;
+      const progress = Math.min(Math.max(scrollY / heroH, 0), 1);
 
       if (progress > 0.0001) {
-        const centerScale = 1 - 0.18 * progress;
-        const centerBlur = progress * 6; // px
-        const centerOpacity = 1 - 0.35 * progress;
-        if (centerContent) {
-          centerContent.style.transform = `translateY(0) scale(${centerScale})`;
-          centerContent.style.filter = `blur(${centerBlur}px)`;
-          centerContent.style.opacity = `${centerOpacity}`;
-        }
+        const scale = 1 - 0.18 * progress;
+        const blur = 6 * progress;
+        const opacity = 1 - 0.35 * progress;
+        centerContent.style.transform = `translateY(0) scale(${scale})`;
+        centerContent.style.filter = `blur(${blur}px)`;
+        centerContent.style.opacity = `${opacity}`;
 
         if (bottomNote) {
           bottomNote.style.transform = `scale(${1 - 0.06 * progress})`;
@@ -732,7 +602,6 @@ const pickNextPortfolioImage = (previousFile) => {
           bottomNote.style.opacity = `${1 - 0.4 * progress}`;
         }
       } else {
-        // Clear inline styles to preserve initial reveal animation styles
         [centerContent, bottomNote].forEach((el) => {
           if (!el) return;
           el.style.transform = '';
@@ -745,14 +614,9 @@ const pickNextPortfolioImage = (previousFile) => {
     });
   }
 
-  window.addEventListener('load', () => {
-    onScroll();
-  });
-
-  window.addEventListener('resize', () => {
-    onScroll();
-  });
-
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('load', onScroll);
 })();
+
 
