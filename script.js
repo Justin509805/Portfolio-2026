@@ -364,6 +364,20 @@ const pickNextPortfolioImage = (previousFile) => {
   });
 })();
 
+/* Keep the navbar visually stuck once the page scrolls */
+(function () {
+  const nav = document.querySelector('.top-nav');
+  if (!nav) return;
+
+  const updateStickyState = () => {
+    nav.classList.toggle('is-stuck', window.scrollY > 12);
+  };
+
+  window.addEventListener('scroll', updateStickyState, { passive: true });
+  window.addEventListener('load', updateStickyState);
+  updateStickyState();
+})();
+
 /* Image preview modal for resume links */
 (function () {
   const modal = document.querySelector("[data-image-preview-modal]");

@@ -53,6 +53,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
 }
 
 html {
@@ -156,7 +157,17 @@ a {
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-subtle);
   box-sizing: border-box;
-  transition: background 320ms ease, box-shadow 320ms ease;
+  transition:
+    background 320ms ease,
+    box-shadow 320ms ease,
+    border-color 320ms ease,
+    transform 320ms ease;
+}
+
+.top-nav.is-stuck {
+  background: rgba(15, 15, 15, 0.97);
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0.85rem 2.5rem rgba(0, 0, 0, 0.22);
 }
 
 .nav-name,
