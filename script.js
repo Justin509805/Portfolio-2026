@@ -364,6 +364,66 @@ const pickNextPortfolioImage = (previousFile) => {
   });
 })();
 
+/* Smooth scroll for all same-page hash links, including overlay sections */
+(function () {
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  const getScrollTarget = (hash) => {
+    if (!hash || hash === "#") return null;
+    return document.querySelector(hash);
+  };
+
+  const getNavOffset = () => {
+    const nav = document.querySelector(".top-nav");
+    return nav ? nav.getBoundingClientRect().height + 16 : 16;
+  };
+
+  const scrollToHash = (hash, updateHistory = true) => {
+    const target = getScrollTarget(hash);
+    if (!target) return false;
+
+    const targetTop = hash === "#top"
+      ? 0
+      : Math.max(
+          target.getBoundingClientRect().top + window.pageYOffset - getNavOffset(),
+          0
+        );
+
+    window.scrollTo({
+      top: targetTop,
+      behavior: prefersReducedMotion ? "auto" : "smooth"
+    });
+
+    if (updateHistory) {
+      window.history.pushState(null, "", hash);
+    }
+
+    return true;
+  };
+
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    const href = link.getAttribute("href");
+    if (!href || href === "#") return;
+
+    if (!getScrollTarget(href)) return;
+
+    event.preventDefault();
+    scrollToHash(href);
+  });
+
+  window.addEventListener("load", () => {
+    if (!window.location.hash) return;
+    window.setTimeout(() => {
+      scrollToHash(window.location.hash, false);
+    }, 80);
+  });
+})();
+
 /* Image preview modal for resume links */
 (function () {
   const modal = document.querySelector("[data-image-preview-modal]");
