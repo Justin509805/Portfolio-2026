@@ -183,6 +183,38 @@ const pickNextPortfolioImage = (previousFile) => {
   requestAnimationFrame(tick);
 })();
 
+/* Text-swap setup: wrap hoverable link text with two layers for the slide animation */
+(function () {
+  function applyTextSwap(el, textOverride) {
+    if (!el) return;
+
+    var text = (typeof textOverride === 'string' ? textOverride : el.textContent).trim();
+    if (!text) return;
+
+    var wrap = el.querySelector('.text-swap-wrap');
+    if (!wrap) {
+      wrap = document.createElement('span');
+      wrap.className = 'text-swap-wrap';
+      el.textContent = '';
+      el.appendChild(wrap);
+    }
+
+    wrap.innerHTML =
+      '<span class="swap-out">' + text + '</span>' +
+      '<span class="swap-in" aria-hidden="true">' + text + '</span>';
+  }
+
+  window.applyTextSwap = applyTextSwap;
+
+  var targets = document.querySelectorAll(
+    '.nav-links a, .nav-name, .nav-toggle, .site-footer .footer-links .contact-link, .mobile-links a, .image-preview-close, .image-preview-download'
+  );
+
+  targets.forEach(function (el) {
+    applyTextSwap(el);
+  });
+})();
+
 /* Desktop cursor image interaction for the first screen */
 (function () {
   const prefersReducedMotion = window.matchMedia(
@@ -333,7 +365,11 @@ const pickNextPortfolioImage = (previousFile) => {
 
   function setMenuOpen(open) {
     document.documentElement.classList.toggle('menu-open', open);
-    navToggle.textContent = open ? 'CLOSE' : 'MENU';
+    if (typeof window.applyTextSwap === 'function') {
+      window.applyTextSwap(navToggle, open ? 'CLOSE' : 'MENU');
+    } else {
+      navToggle.textContent = open ? 'CLOSE' : 'MENU';
+    }
     navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
     if (open) {
