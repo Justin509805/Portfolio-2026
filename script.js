@@ -38,6 +38,14 @@ const pickNextPortfolioImage = (previousFile) => {
   return candidates[Math.floor(Math.random() * candidates.length)];
 };
 
+/* How long to wait for the page-transition overlay to finish before
+   starting content animations (0 when no transition is in progress). */
+var PAGE_ENTER_DELAY = sessionStorage.getItem('pt') ? 480 : 0;
+
+if (PAGE_ENTER_DELAY) {
+  document.documentElement.classList.add('page-entering');
+}
+
 /**
  * Name reveal animation for the first screen.
  * Requirements:
@@ -55,7 +63,13 @@ const pickNextPortfolioImage = (previousFile) => {
   ).matches;
 
   const nameEl = document.querySelector(".center-name");
-  if (!nameEl) return;
+  if (!nameEl) {
+    setTimeout(function () {
+      root.classList.add('reveal-done');
+      root.classList.add('anim-done');
+    }, PAGE_ENTER_DELAY);
+    return;
+  }
 
   const pageUrl = new URL(window.location.href);
   const isLogoReturn = pageUrl.searchParams.get("from") === "logo";
@@ -109,9 +123,12 @@ const pickNextPortfolioImage = (previousFile) => {
   };
 
   if (prefersReducedMotion) {
-    nameEl.style.setProperty("--reveal", "100%");
-    nameEl.classList.add("is-zoomed");
-    done();
+    setTimeout(function () {
+      nameEl.style.setProperty("--reveal", "100%");
+      nameEl.classList.add("is-zoomed");
+      root.classList.add('reveal-done');
+      done();
+    }, PAGE_ENTER_DELAY);
     return;
   }
 
@@ -180,7 +197,9 @@ const pickNextPortfolioImage = (previousFile) => {
   };
 
   nameEl.style.setProperty("--reveal", "0%");
-  requestAnimationFrame(tick);
+  setTimeout(function () {
+    requestAnimationFrame(tick);
+  }, PAGE_ENTER_DELAY);
 })();
 
 /* Text-swap setup: wrap hoverable link text with two layers for the slide animation */
@@ -611,7 +630,9 @@ const pickNextPortfolioImage = (previousFile) => {
     { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
   );
 
-  items.forEach((el) => observer.observe(el));
+  setTimeout(function () {
+    items.forEach((el) => observer.observe(el));
+  }, PAGE_ENTER_DELAY);
 })();
 
 /* Scroll-driven parallax: blur/scale the hero name and bottom note as user
@@ -669,4 +690,63 @@ const pickNextPortfolioImage = (previousFile) => {
   window.addEventListener('load', onScroll);
 })();
 
+/* Page transition: wipe overlay on navigate */
+(function () {
+  var overlay = document.createElement('div');
+  overlay.className = 'page-transition';
+  document.body.appendChild(overlay);
 
+  var duration = 460;
+
+  if (sessionStorage.getItem('pt')) {
+    sessionStorage.removeItem('pt');
+    overlay.style.transform = 'translateY(0)';
+    overlay.style.transition = 'none';
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        overlay.style.transition = '';
+        overlay.classList.add('is-revealing');
+      });
+    });
+
+    setTimeout(function () {
+      overlay.classList.remove('is-revealing');
+      overlay.style.transform = '';
+      document.documentElement.classList.remove('page-entering');
+      document.documentElement.classList.add('page-entered');
+    }, duration + 20);
+
+    setTimeout(function () {
+      document.documentElement.classList.remove('page-entered');
+    }, duration + 620);
+  }
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a');
+    if (!link) return;
+
+    var href = link.getAttribute('href');
+    if (!href) return;
+    if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') ||
+        href.startsWith('http') || link.target === '_blank' ||
+        link.hasAttribute('download') || link.hasAttribute('data-preview-image-trigger') ||
+        link.closest('[data-image-preview-modal]')) return;
+
+    e.preventDefault();
+    sessionStorage.setItem('pt', '1');
+    overlay.classList.add('is-covering');
+
+    setTimeout(function () {
+      window.location.href = href;
+    }, duration);
+  });
+
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) {
+      overlay.classList.remove('is-covering');
+      overlay.style.transform = '';
+      sessionStorage.removeItem('pt');
+    }
+  });
+})();
