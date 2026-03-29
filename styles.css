@@ -53,9 +53,9 @@
 }
 
 .headline-accent {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  letter-spacing: 0;
+  font-family: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
 }
 
 /* Text-swap hover: Montreal slides up, Apple Garamond rises from below */
@@ -76,8 +76,9 @@
   inset: 0;
   transform: translateY(100%);
   font-family: var(--font-serif);
+  font-style: italic;
   font-weight: 400;
-  font-size: 1.12em;
+  font-size: 1.16em;
   letter-spacing: 0.03em;
 }
 
